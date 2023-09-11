@@ -1,0 +1,14 @@
+{
+    "a": ["appreciate"],
+    "c": ["can", "could"],
+    "e": ["excuse"],
+    "h": ["help"],
+    "i": ["i"],
+    "k": ["kind"],
+    "m": ["may"],
+    "p": ["pardon", "please"],
+    "r": ["respect"],
+    "s": ["sorry"],
+    "t": ["thank", "thanks", "thankyou"],
+    "w": ["welcome", "would"]
+}

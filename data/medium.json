@@ -1,0 +1,14 @@
+{
+    "a": ["ask"],
+    "c": ["call", "come"],
+    "d": ["do"],
+    "f": ["find"],
+    "g": ["get", "give", "go"],
+    "l": ["look"],
+    "m": ["make"],
+    "n": ["no"],
+    "s": ["say"],
+    "t": ["take", "talk", "tell", "try"],
+    "u": ["use"],
+    "w": ["work", "write"]
+}

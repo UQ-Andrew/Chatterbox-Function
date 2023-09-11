@@ -1,0 +1,20 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: black;
+}
+
+body > div {
+	background: white;
+	width: 90%;
+	padding: 1em;
+	margin: 2em auto;
+	margin-bottom: 38vw;
+}
+
+#output {
+	white-space: pre-line;
+}
