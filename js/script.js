@@ -45,7 +45,7 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
-    $("#email").submit(function (event) {
+    $('#message').keyup(function (event) {
 
         const message = $('#message').val();
 
@@ -74,8 +74,9 @@ $(document).ready(function() {
 
             for (let i = 0; i < sentencesEndings.length; i++) {
 
+                /* Old thing for debugging
                 console.log("messagePoint: %d, sentence length: %d, sentence: %s", 
-                    messagePoint, sentencesEndings[i].length, sentencesEndings[i]);
+                    messagePoint, sentencesEndings[i].length, sentencesEndings[i]);*/
 
                 if ((sentencesEndings % 2) != 0) {
                     // Sentence
@@ -100,8 +101,10 @@ $(document).ready(function() {
                 messagePoint += sentencesEndings[i].length;
             }
         //});
+    });
 
-		event.preventDefault();
+    $("#email").submit(function (event) {
+        event.preventDefault();
     });
 });
 
