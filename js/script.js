@@ -1,5 +1,46 @@
 // Json files to load
-const dataURLs = ['./data/rude.json', './data/medium.json', './data/polite.json'];
+// const dataURLs = ['./data/rude.json', './data/medium.json', './data/polite.json'];
+
+const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
+    "b": ["bastard", "bitch", "bloody", "bullshit"],
+    "c": ["cock", "crap", "cunt"],
+    "d": ["damn", "dick", "dickhead", "die"],
+    "f": ["fuck", "fucking"],
+    "g": ["goddamn", "godsdamn"],
+    "h": ["hell", "horseshit"],
+    "k": ["kill"],
+    "m": ["motherfucker"],
+    "n": ["nigga"],
+    "p": ["piss", "prick", "pussy"],
+    "s": ["shit", "shite", "slut", "spastic"],
+    "t": ["twat"],
+    "w": ["wanker", "whore"]};
+
+const medium = {"a": ["ask"],
+    "c": ["call", "come"],
+    "d": ["do"],
+    "f": ["find"],
+    "g": ["get", "give", "go"],
+    "l": ["look"],
+    "m": ["make"],
+    "n": ["no"],
+    "s": ["say"],
+    "t": ["take", "talk", "tell", "try"],
+    "u": ["use"],
+    "w": ["work", "write"]};
+
+const polite = {"a": ["appreciate"],
+    "c": ["can", "could"],
+    "e": ["excuse"],
+    "h": ["help"],
+    "i": ["i", "if"],
+    "k": ["kind"],
+    "m": ["may"],
+    "p": ["pardon", "please"],
+    "r": ["respect"],
+    "s": ["sorry"],
+    "t": ["thank", "thanks", "thankyou"],
+    "w": ["welcome", "would"]};
 
 $(document).ready(function() {
     $("body").addClass("js");
@@ -20,14 +61,14 @@ $(document).ready(function() {
         }
 
 
-        get_jsons(dataURLs).then(jsonList => {
+        /*get_jsons(dataURLs).then(jsonList => {
             // jsonList = [rude, medium, polite]?
             const rude = jsonList[0];
             console.log(rude);
             const medium = jsonList[1];
             console.log(medium);
             const polite = jsonList[2];
-            console.log(polite);
+            console.log(polite);*/
 
             let messagePoint = 0;
 
@@ -58,7 +99,7 @@ $(document).ready(function() {
 
                 messagePoint += sentencesEndings[i].length;
             }
-        });
+        //});
 
 		event.preventDefault();
     });
