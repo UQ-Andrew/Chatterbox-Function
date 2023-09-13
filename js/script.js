@@ -45,9 +45,11 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
-    $('#message').keyup(function (event) {
+    let lastDate = new Date($(".chat-box > p:last-of-type").html());
 
-        const message = $('#message').val();
+    $('#input').keyup(function (event) {
+
+        const message = $('#input').val();
 
         // Ending up using a wierd array structure where every second element is a sentence ending (., !, ?, or \n)
 		const sentencesEndings = message.split(/([.!?\n]+)/);
@@ -109,6 +111,18 @@ $(document).ready(function() {
     });
 
     $("#email").submit(function (event) {
+        if ($('#input').val().length > 0) {
+            const now = Date.now();
+            if ((now - lastDate.getTime()) > 60000) {
+                lastDate.setTime(now);
+                $(".chat-box:first-of-type").append(
+                    `<p> ${new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+            }
+            $(".chat-box:first-of-type").append(`<div><div class="personal">
+                <p>${$('#input').val()}</p>
+                </div></div>`);
+        }
+        
         event.preventDefault();
     });
 });

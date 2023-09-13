@@ -48,7 +48,7 @@ nav img{
 
 /* chat-interface -> contact-container */
 .contact-container{
-    background-color: #656666;
+    background-color:rgba(78, 78, 78, 0.95);
     border-radius: 5px;
     height: 75%;
     color: white;
@@ -97,7 +97,7 @@ nav img{
     grid-template-rows: [row1-start] 30px [first-end] auto [third-line] 50px [fourth-line] 30px [last-line];
     grid-gap: 5px;
     border-radius: 5px;
-    background-color: #656666;
+    background-color:rgba(78, 78, 78, 0.95);
     height: 100%;
     width: 100%;
     grid-column-start: line3;
@@ -107,15 +107,52 @@ nav img{
 }
 
 /* chat-interface -> chat-room -> chat-box */
-.chat-box{
-    background-color: #656666;
+.chat-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
     grid-column-start: line2;
     grid-column-end: col4-start;
     grid-row-start: first-end;
     grid-row-end: third-line;
     width: 100%;
+	height: 80%;
+	overflow: auto;
     text-align: center;
     color: white;
+}
+
+.chat-box > div {
+	width: 100%;
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
+
+.chat-box > div > div {
+	float: left;
+    border: 5px gray;
+    border-radius: 5px;
+    background-color: lightgray;
+    min-width: 20%;
+    max-width: 90%;
+    color: black;
+}
+
+.chat-box > div > div > p {
+	white-space: pre-line;
+	margin-left: 2em;
+	margin-right: 1em;
+}
+
+.chat-box > div > .personal {
+	background-color: #71CCFF;
+	float: right;
+}
+
+.chat-box > div > .personal > p {
+	float: right;
+	margin-left: 1em;
+	margin-right: 2em;
 }
 
 /* chat-interface -> chat-room -> email -> send_btn */
@@ -133,8 +170,8 @@ nav img{
     font-size: large;
 }
 
-/* chat-interface -> chat-room -> email -> message */
-#message{
+/* chat-interface -> chat-room -> email -> input */
+#input{
     border-radius: 5px;
     grid-row-start: first_row;
     grid-row-end: second_row;
@@ -187,6 +224,7 @@ nav img{
     grid-template-rows: [first_row] 100% [second_row];
 }
 
+/* Spinning lines animation */
 .animation {
 	position: absolute;
 	z-index: -1;
@@ -198,7 +236,7 @@ nav img{
     height:100vh;
 }
 
-.circles {
+.lines {
     position: absolute;
     top: 0;
     left: 0;
@@ -207,7 +245,7 @@ nav img{
     overflow: hidden;
 }
 
-.circles li {
+.lines li {
     position: absolute;
     display: block;
     list-style: none;
@@ -220,60 +258,60 @@ nav img{
     
 }
 
-.circles li:nth-child(1){
+.lines li:nth-child(1){
     left: 5%;
 	animation-delay: -50s;
     width: 20vh;
 }
 
 
-.circles li:nth-child(2){
+.lines li:nth-child(2){
     left: 10%;
     width: 120vh;
     animation-duration: 60s;
 	animation-delay: -20s;
 }
 
-.circles li:nth-child(3){
+.lines li:nth-child(3){
     left: 50%;
     width: 100vh;
 	animation-delay: -20s;
 }
 
-.circles li:nth-child(4){
+.lines li:nth-child(4){
     left: 20%;
     width: 40vh;
 	bottom: 50%;
     animation-duration: 80s;
 }
 
-.circles li:nth-child(5){
+.lines li:nth-child(5){
     left: 2%;
 	animation-delay: -10s;
 }
 
-.circles li:nth-child(6){
+.lines li:nth-child(6){
     left: 37%;
 	animation-delay: -60s;
 }
 
-.circles li:nth-child(7){
+.lines li:nth-child(7){
     left: 17%;
 	animation-delay: -10s;
 }
 
-.circles li:nth-child(8){
+.lines li:nth-child(8){
     left: 25%;
     animation-duration: 140s;
 }
 
-.circles li:nth-child(9){
+.lines li:nth-child(9){
     left: 60%;
 	bottom: 30%;
     animation-duration: 90s;
 }
 
-.circles li:nth-child(10){
+.lines li:nth-child(10){
     left: 80%;
     animation-duration: 150s;
 }
