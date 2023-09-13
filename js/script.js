@@ -52,10 +52,12 @@ $(document).ready(function() {
         // Ending up using a wierd array structure where every second element is a sentence ending (., !, ?, or \n)
 		const sentencesEndings = message.split(/([.!?\n]+)/);
 
+        $('#output-container').addClass("hidden");
         $('#output-container').html("<p id='output'></p>");
 
         // Length Warning
         if (message.length > 1000) {
+            $('#output-container').removeClass("hidden");
             $('#output').append("<i>Warning: A long message may not be properly read, " + 
                 "Consider organising a meetup. </i><br><br>");
         }
@@ -84,18 +86,21 @@ $(document).ready(function() {
 
                     if (search_string_with_dict(words, rude)) {
                         // Very rude word found in this sentence
-                        $('#output').append("<b>" + sentencesEndings[i] + "</b>");
+                        $('#output-container').removeClass("hidden");
+                        $('#output').append("Warning, this sentence may be rude: <b>" + sentencesEndings[i] + "</b><br>");
+                        return;
                     } else if (search_string_with_dict(words, medium) && !search_string_with_dict(words, polite)) {
                         // Maybe somewhat rude sentence found, probably subject to false positives and negatives
                         // e.g. A command like 'Work on that' or 'no' without words like 'could', 'thank' or 'please'
-                        $('#output').append("<i>" + sentencesEndings[i] + "</i>");
+                        $('#output-container').removeClass("hidden");
+                        $('#output').append("Warning, this sentence may be slightly rude: <i>" + sentencesEndings[i] + "</i><br>");
+                        return;
                     } else {
-
-                        $('#output').append(sentencesEndings[i]);
+                        //$('#output').append(sentencesEndings[i]);
                     }
                 } else {
                     // Sentence Ending, i.e. one or more '.', '?', '!', or '\n' characters
-                    $('#output').append(sentencesEndings[i]);
+                    //$('#output').append(sentencesEndings[i]);
                 }
 
                 messagePoint += sentencesEndings[i].length;
