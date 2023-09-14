@@ -50,7 +50,7 @@ nav img{
 .contact-container{
     background-color:rgba(78, 78, 78, 0.95);
     border-radius: 5px;
-    height: 75%;
+    height: min-content;
     color: white;
     width: 100%;
     grid-column-start: line2;
