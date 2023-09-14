@@ -120,9 +120,15 @@ $(document).ready(function() {
                 chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
                     { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
             }
+
             chatBox.append(`<div><div class="personal">
                 <p>${$('#input').val()}</p>
                 </div></div>`);
+            
+            $('#input').val("");
+
+            $('#output-container').addClass("hidden");
+            $('#output-container').html("<p id='output'></p>");
             
             chatBox[0].scrollTop = chatBox[0].scrollHeight;
         }

@@ -76,15 +76,16 @@ nav img{
     padding-top: 0.3em;
     padding-bottom: 0.3em;
     display: flex;
-    justify-content: space-around;
     align-items: center;
     color: #000000;
     font-weight: bold;
     text-align: left;
+    overflow: hidden;
 }
 
-.individual_contact img{
+.individual_contact img {
     width: 35%;
+    margin-right: 5%;
     border-radius: 50%;
     height: auto;
 }
@@ -146,8 +147,8 @@ nav img{
 
 .chat-box > div {
 	width: 100%;
-	margin-top: 1em;
-	margin-bottom: 1em;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .chat-box > div > div {
@@ -155,26 +156,21 @@ nav img{
     border: 5px gray;
     border-radius: 5px;
     background-color: lightgray;
-    min-width: 20%;
+    /*min-width: 20%;*/
     max-width: 90%;
     color: black;
 }
 
 .chat-box > div > div > p {
-	white-space: pre-line;
-	margin-left: 2em;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+	margin-left: 1em;
 	margin-right: 1em;
 }
 
 .chat-box > div > .personal {
 	background-color: #71CCFF;
 	float: right;
-}
-
-.chat-box > div > .personal > p {
-	float: right;
-	margin-left: 1em;
-	margin-right: 2em;
 }
 
 /* chat-interface -> chat-room -> email -> send_btn */
@@ -218,7 +214,8 @@ nav img{
 
 /* chat-interface -> chat-room -> output-container */
 #output-container {
-	white-space: pre-line;
+	white-space: pre-wrap;
+    overflow-wrap: break-word;
     background-color: rgba(220, 83, 92, 0.6);
     opacity: 60%;
     width: 80%;
