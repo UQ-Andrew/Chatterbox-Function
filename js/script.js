@@ -112,15 +112,19 @@ $(document).ready(function() {
 
     $("#email").submit(function (event) {
         if ($('#input').val().length > 0) {
+            const chatBox = $(".chat-box:first-of-type");
+
             const now = Date.now();
             if ((now - lastDate.getTime()) > 60000) {
                 lastDate.setTime(now);
-                $(".chat-box:first-of-type").append(
-                    `<p> ${new Intl.DateTimeFormat('en-GB', { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+                chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
+                    { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
             }
-            $(".chat-box:first-of-type").append(`<div><div class="personal">
+            chatBox.append(`<div><div class="personal">
                 <p>${$('#input').val()}</p>
                 </div></div>`);
+            
+            chatBox[0].scrollTop = chatBox[0].scrollHeight;
         }
         
         event.preventDefault();
