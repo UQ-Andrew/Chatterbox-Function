@@ -58,7 +58,7 @@ $(document).ready(function() {
         $('#output-container').html("<p id='output'></p>");
 
         // Length Warning
-        if (message.length > 1000) {
+        if (message.length > 500) {
             $('#output-container').removeClass("hidden");
             $('#output').append("<i>Warning: A long message may not be properly read, " + 
                 "Consider organising a meetup. </i><br><br>");

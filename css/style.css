@@ -165,6 +165,7 @@ nav img{
 .chat-box > div > div > p {
     white-space: pre-wrap;
     overflow-wrap: break-word;
+    text-align: left;
 	margin-left: 1em;
 	margin-right: 1em;
 }
