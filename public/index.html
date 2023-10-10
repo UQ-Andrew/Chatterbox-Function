@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatterbox</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="top_bar">
+        <img src="images/logo_bg_removed.png" alt="Company Logo" id="logo">
+        <nav>
+            <img src="images/icon _messages 2_.png" alt="message">
+            <img src="images/icon _profile circle_.png" alt="profile">
+            <img src="images/icon _setting 2_.png" alt="_setting">
+        </nav>
+    </div>
+
+    <div class="chat-interface">
+
+        <section class="contact-container">
+            <div id="contact-list">
+                <div class="individual_contact">
+                    <img src="images/Lion.png" alt="profile" >
+                    <p>Jambo Saunders</p>
+                </div>
+                <div class="individual_contact">
+                    <img src="images/Cat.png" alt="profile" >
+                    <p>Abrar Hashim</p>
+                </div>
+                <div class="individual_contact">
+                    <img src="images/Dolphin.png" alt="profile" >
+                    <p>Nikolas</p>
+                </div>
+                <div class="individual_contact">
+                    <img src="images/Bird.png" alt="profile" >
+                    <p>Eleonora</p>
+                </div>
+                <div class="individual_contact">
+                    <img src="images/Animal.png" alt="profile" >
+                    <p>James</p>
+                </div>
+                <div class="individual_contact">
+                    <img src="images/Animal2.png" alt="profile" >
+                    <p>Miroslava Morosov</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="chat-room">
+
+            <div class="chat-box">
+                <p>4 Sept 2023, 12:35</p>
+				<div>
+					<div>
+						<p>Have you sent through the reports?</p>
+					</div>
+				</div>
+				<p>5 Sept 2023, 10:05</p>
+				<div>
+					<div class="personal">
+						<p>Sorry for the delay, they will be sent through shortly.</p>
+					</div>
+				</div>
+            </div>
+
+            <form id="email" method="post">
+                <textarea type="text" id="input" name="input" placeholder="Message"></textarea>
+                <button id="send_btn" type="submit">Send</button>
+            </form>
+
+            <div id="output-container" class="hidden">
+                <p id="output"></p>
+            </div>
+            
+        </section>
+
+    </div>
+
+    <div class="animation">
+        <ul class="lines">
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+                <li></li>
+        </ul>
+    </div>
+
+		<script src="js/jquery-3.5.1.min.js"></script>
+		<script src="js/script.js"></script>
+</body>
+</html>
