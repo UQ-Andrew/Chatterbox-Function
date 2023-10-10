@@ -8,7 +8,7 @@ const OpenAI = require("openai")
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: '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'
+    apiKey: ''
 });
 
 // Going to localhost:5000 will open public/index.html
