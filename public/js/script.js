@@ -45,8 +45,6 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
-    send_to_server("Test Message");
-
     let lastDate = new Date($(".chat-box > p:last-of-type").html());
 
     $('#input').keyup(function (event) {

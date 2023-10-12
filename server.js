@@ -23,12 +23,18 @@ app.listen(port, ()=> {
 
 app.post('/api', async (req, res)=> {
     try {
-        const resp = await openai.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [{"role": "user", "content": req.body.question}],
-        });
+        const moderationCheck = await openai.moderations.create({ input: req.body.question });
 
-        res.status(200).json({message: resp.choices[0].message});
+        if (moderationCheck.results[0].flagged == true) {
+            res.status(400).json({message: moderationCheck.results[0]});
+        } else {
+            const resp = await openai.chat.completions.create({
+                model: "gpt-3.5-turbo",
+                messages: [{"role": "user", "content": req.body.question}],
+            });
+    
+            res.status(200).json({message: resp.choices[0].message});
+        }
     } catch(e) {
         res.status(400).json({message: e.message});
     }
