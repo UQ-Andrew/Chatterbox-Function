@@ -58,7 +58,7 @@ $(document).ready(function() {
         $('#output-container').html("<p id='output'></p>");
 
         // Length Warning
-        if (message.length > 500) {
+        if (message.length > 200) {
             $('#output-container').removeClass("hidden");
             $('#output').append("<i>Warning: A long message may not be properly read, " + 
                 "Consider organising a meetup. </i><br><br>");
@@ -135,6 +135,15 @@ $(document).ready(function() {
         
         event.preventDefault();
     });
+
+    $("#ai_check").click(function (event) {
+        if ($('#input').val().length > 0) {
+            send_to_server($('#input').val(), "Australian").then(jsonMessage => {
+                $('#input').val(jsonMessage.content);
+            });
+        }
+        event.preventDefault();
+    });
 });
 
 /**
@@ -208,7 +217,7 @@ function binary_string_search(arr, el) {
  * Used https://www.freecodecamp.org/news/how-to-create-a-chatbot-with-the-chatgpt-api/ as help
  * @param {String} inputText What to send to the server
  */
-async function send_to_server(inputText) {
+async function send_to_server(inputText, culture) {
     if (inputText.trim().length === 0) {
         return
     }
@@ -217,7 +226,10 @@ async function send_to_server(inputText) {
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({'question': inputText})
+        body: JSON.stringify({
+            'question': inputText,
+            'user-culture': culture
+        })
     });
         
     const data = await response.json()
@@ -225,6 +237,7 @@ async function send_to_server(inputText) {
     // data.message is the actual message sent back from the server, in this case chatGPT response (when implemented)
     if (data.message) {
         // Do stuff in the future with data.message
-        console.log(data.message)
+        console.log(data.message);
+        return data.message;
     }
 }
