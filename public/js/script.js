@@ -228,7 +228,7 @@ async function send_to_server(inputText, culture) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             'question': inputText,
-            'user-culture': culture
+            'culture': culture
         })
     });
         
