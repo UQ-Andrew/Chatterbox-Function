@@ -1,6 +1,8 @@
 // Json files to load
 // const dataURLs = ['./data/rude.json', './data/medium.json', './data/polite.json'];
 
+const userID = 7; // Replace in the future with something (maybe php) for logins
+
 const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
     "b": ["bastard", "bitch", "bloody", "bullshit"],
     "c": ["cock", "crap", "cunt"],
@@ -45,7 +47,28 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
-    let lastDate = new Date($(".chat-box > p:last-of-type").html());
+    let lastDate = new Date(0);
+
+    get_messages(1, userID).then(jsonMessages => {
+        const chatBox = $(".chat-box:first-of-type");
+        chatBox.html("");
+
+        for (let message of jsonMessages) {
+            const curDate = new Date(message.date);
+            if ((curDate - lastDate.getTime()) > 60000) {
+                lastDate.setTime(curDate.getTime());
+                chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
+                    { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+            }
+            chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
+            <p>${message.message}</p>
+            </div></div>`);
+        }
+        
+        chatBox[0].scrollTop = chatBox[0].scrollHeight;
+    });
+
+    //lastDate = new Date($(".chat-box > p:last-of-type").html());
 
     $('#input').keyup(function (event) {
 
@@ -74,45 +97,45 @@ $(document).ready(function() {
             const polite = jsonList[2];
             console.log(polite);*/
 
-            let messagePoint = 0;
+        let messagePoint = 0;
 
-            for (let i = 0; i < sentencesEndings.length; i++) {
+        for (let i = 0; i < sentencesEndings.length; i++) {
 
-                /* Old thing for debugging
-                console.log("messagePoint: %d, sentence length: %d, sentence: %s", 
-                    messagePoint, sentencesEndings[i].length, sentencesEndings[i]);*/
+            /* Old thing for debugging
+            console.log("messagePoint: %d, sentence length: %d, sentence: %s", 
+                messagePoint, sentencesEndings[i].length, sentencesEndings[i]);*/
 
-                if ((sentencesEndings % 2) != 0) {
-                    // Sentence
-                    let words = sentencesEndings[i].toLowerCase().match(/\b(\w+)\b/g);
+            if ((sentencesEndings % 2) != 0) {
+                // Sentence
+                let words = sentencesEndings[i].toLowerCase().match(/\b(\w+)\b/g);
 
-                    if (search_string_with_dict(words, rude)) {
-                        // Very rude word found in this sentence
-                        $('#output-container').removeClass("hidden");
-                        $('#output').append("Warning, this sentence may be rude: <b>" + sentencesEndings[i] + "</b><br>");
-                        return;
-                    } else if (search_string_with_dict(words, medium) && !search_string_with_dict(words, polite)) {
-                        // Maybe somewhat rude sentence found, probably subject to false positives and negatives
-                        // e.g. A command like 'Work on that' or 'no' without words like 'could', 'thank' or 'please'
-                        $('#output-container').removeClass("hidden");
-                        $('#output').append("Warning, this sentence may be slightly rude: <i>" + sentencesEndings[i] + "</i><br>");
-                        return;
-                    } else {
-                        //$('#output').append(sentencesEndings[i]);
-                    }
+                if (search_string_with_dict(words, rude)) {
+                    // Very rude word found in this sentence
+                    $('#output-container').removeClass("hidden");
+                    $('#output').append("Warning, this sentence may be rude: <b>" + sentencesEndings[i] + "</b><br>");
+                    return;
+                } else if (search_string_with_dict(words, medium) && !search_string_with_dict(words, polite)) {
+                    // Maybe somewhat rude sentence found, probably subject to false positives and negatives
+                    // e.g. A command like 'Work on that' or 'no' without words like 'could', 'thank' or 'please'
+                    $('#output-container').removeClass("hidden");
+                    $('#output').append("Warning, this sentence may be slightly rude: <i>" + sentencesEndings[i] + "</i><br>");
+                    return;
                 } else {
-                    // Sentence Ending, i.e. one or more '.', '?', '!', or '\n' characters
                     //$('#output').append(sentencesEndings[i]);
                 }
-
-                messagePoint += sentencesEndings[i].length;
+            } else {
+                // Sentence Ending, i.e. one or more '.', '?', '!', or '\n' characters
+                //$('#output').append(sentencesEndings[i]);
             }
-        //});
+
+            messagePoint += sentencesEndings[i].length;
+        }
     });
 
     $("#email").submit(function (event) {
         if ($('#input').val().length > 0) {
             const chatBox = $(".chat-box:first-of-type");
+            send_message($('#input').val(), 1, userID);
 
             const now = Date.now();
             if ((now - lastDate.getTime()) > 60000) {
@@ -213,7 +236,7 @@ function binary_string_search(arr, el) {
     return ~m;
 }
 /**
- * Function to send data to server and then do stuff with it
+ * Function to send data to OPENAI server and get a more appropriate message back
  * Used https://www.freecodecamp.org/news/how-to-create-a-chatbot-with-the-chatgpt-api/ as help
  * @param {String} inputText What to send to the server
  */
@@ -239,5 +262,55 @@ async function send_to_server(inputText, culture) {
         // Do stuff in the future with data.message
         console.log(data.message);
         return data.message;
+    }
+}
+
+/**
+ * Function to send users to the server, then get back all messages between them
+ * @param user1 One of the users in the messaging
+ * @param user2 The other user in the messaging
+ */
+async function get_messages(user1, user2) {
+    let response = await fetch('http://localhost:5000/get_messages', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'user1': user1,
+            'user2': user2
+        })
+    });
+        
+    const data = await response.json();
+
+    // data.result is all the messages
+    if (data.result) {
+        return data.result;
+    }
+}
+
+/**
+ * Function to send a message to a chat
+ * @param {String} message 
+ * @param chatID 
+ * @param user user ID
+ */
+async function send_message(message, chatID, user) {
+    let response = await fetch('http://localhost:5000/send_message', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'message': message,
+            'chatID': chatID,
+            'userID': user
+        })
+    });
+        
+    const data = await response.json();
+
+    // data.result is the server response
+    if (data.result) {
+        return data.result;
     }
 }

@@ -3,6 +3,56 @@ const express =  require('express');
 const app = express();
 app.use(express.json());
 
+// mysql setup
+var mysql = require('mysql2');
+
+var database = mysql.createConnection({
+    host: "localhost",
+    port: "3306",
+    user: "AndrewI",
+    password: 'localhost',
+    database: "deco2850"
+});
+  
+database.connect(function(err) {
+    if (err) {
+        console.log(err);
+        database = null;
+        console.log("Not connected to database");
+    } else {
+        console.log("Connected to database!");
+    }
+});
+
+app.post('/get_messages', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    database.query(`SELECT * FROM messages WHERE chatID IN 
+        (SELECT id FROM chats WHERE (user1 = '${req.body.user1}' AND user2 = '${req.body.user2}')
+        OR (user1 = '${req.body.user2}' AND user2 = '${req.body.user1}'))`, function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+      });
+});
+
+app.post('/send_message', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    database.query(`INSERT INTO messages (message, chatID, userID) VALUES 
+    ('${req.body.message}', '${req.body.chatID}', '${req.body.userID}')`, function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+      });
+});
+
 // openAI setup
 const OpenAI = require("openai");
 
@@ -40,4 +90,4 @@ app.post('/api', async (req, res)=> {
     } catch(e) {
         res.status(400).json({message: e.message});
     }
-})
+});
