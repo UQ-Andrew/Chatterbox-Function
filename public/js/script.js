@@ -2,6 +2,9 @@
 // const dataURLs = ['./data/rude.json', './data/medium.json', './data/polite.json'];
 
 const userID = 7; // Replace in the future with something (maybe php) for logins
+let chatID = 1; // Change for whatever chat is loaded, know which chat to load through get_chat()
+let receiverCulture = "Australian"; // Edit with info from get_chat()
+let relationship = "Boss"; // Edit with info from get_chat()
 
 const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
     "b": ["bastard", "bitch", "bloody", "bullshit"],
@@ -49,23 +52,34 @@ $(document).ready(function() {
 
     let lastDate = new Date(0);
 
-    get_messages(1, userID).then(jsonMessages => {
-        const chatBox = $(".chat-box:first-of-type");
-        chatBox.html("");
-
-        for (let message of jsonMessages) {
-            const curDate = new Date(message.date);
-            if ((curDate - lastDate.getTime()) > 60000) {
-                lastDate.setTime(curDate.getTime());
-                chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
-                    { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
-            }
-            chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
-            <p>${message.message}</p>
-            </div></div>`);
+    get_chat(userID, 1).then(jsonInfo => {
+        chatID = jsonInfo.chatID;
+        receiverCulture = jsonInfo.culture;
+        if (jsonInfo.user2 == userID) {
+            relationship = jsonInfo.user2to1Relationship;
+        } else {
+            relationship = jsonInfo.user1to2Relationship;
         }
-        
-        chatBox[0].scrollTop = chatBox[0].scrollHeight;
+
+        get_messages(chatID).then(jsonMessages => {
+            const chatBox = $(".chat-box:first-of-type");
+            chatBox.html("");
+    
+            for (let message of jsonMessages) {
+                const curDate = new Date(message.date);
+                if ((curDate - lastDate.getTime()) > 60000) {
+                    lastDate.setTime(curDate.getTime());
+                    chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
+                        { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+                }
+    
+                chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
+                <p>${message.message}</p>
+                </div></div>`);
+            }
+            
+            chatBox[0].scrollTop = chatBox[0].scrollHeight;
+        });
     });
 
     //lastDate = new Date($(".chat-box > p:last-of-type").html());
@@ -161,7 +175,7 @@ $(document).ready(function() {
 
     $("#ai_check").click(function (event) {
         if ($('#input').val().length > 0) {
-            send_to_server($('#input').val(), "Australian").then(jsonMessage => {
+            send_to_server($('#input').val(), relationship, receiverCulture).then(jsonMessage => {
                 $('#input').val(jsonMessage.content);
             });
         }
@@ -240,7 +254,7 @@ function binary_string_search(arr, el) {
  * Used https://www.freecodecamp.org/news/how-to-create-a-chatbot-with-the-chatgpt-api/ as help
  * @param {String} inputText What to send to the server
  */
-async function send_to_server(inputText, culture) {
+async function send_to_server(inputText, relationship, culture) {
     if (inputText.trim().length === 0) {
         return
     }
@@ -251,33 +265,54 @@ async function send_to_server(inputText, culture) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
             'question': inputText,
+            'relationship': relationship,
             'culture': culture
         })
     });
         
     const data = await response.json()
 
-    // data.message is the actual message sent back from the server, in this case chatGPT response (when implemented)
+    // data.message is the actual message sent back from the server, in this case chatGPT response
     if (data.message) {
-        // Do stuff in the future with data.message
-        console.log(data.message);
         return data.message;
     }
 }
 
 /**
- * Function to send users to the server, then get back all messages between them
- * @param user1 One of the users in the messaging
- * @param user2 The other user in the messaging
+ * Function to find chat information given two user ids
+ * @param senderID userID of the sender
+ * @param receiverID userID of the receiver
  */
-async function get_messages(user1, user2) {
+async function get_chat(senderID, receiverID) {
+    let response = await fetch('http://localhost:5000/get_chat', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'user1': senderID,
+            'user2': receiverID
+        })
+    });
+        
+    const data = await response.json();
+
+    // data.result is the server response
+    if (data.result) {
+        return data.result[0];
+    }
+}
+
+/**
+ * Function to send users to the server, then get back all messages between them
+ * @param chatID Id of the chat to get all the messages for
+ */
+async function get_messages(chatID) {
     let response = await fetch('http://localhost:5000/get_messages', 
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
-            'user1': user1,
-            'user2': user2
+            'chatID': chatID
         })
     });
         
