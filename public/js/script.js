@@ -5,6 +5,7 @@ const userID = 7; // Replace in the future with something (maybe php) for logins
 let chatID = 1; // Change for whatever chat is loaded, know which chat to load through get_chat()
 let receiverCulture = "Australian"; // Edit with info from get_chat()
 let relationship = "Boss"; // Edit with info from get_chat()
+let lastDate = new Date(0);
 
 const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
     "b": ["bastard", "bitch", "bloody", "bullshit"],
@@ -50,8 +51,6 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
-    let lastDate = new Date(0);
-
     get_chat(userID, 1).then(jsonInfo => {
         chatID = jsonInfo.chatID;
         receiverCulture = jsonInfo.culture;
@@ -79,6 +78,7 @@ $(document).ready(function() {
             }
             
             chatBox[0].scrollTop = chatBox[0].scrollHeight;
+            poll_chat_database()
         });
     });
 
@@ -183,6 +183,43 @@ $(document).ready(function() {
     });
 });
 
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function poll_chat_database() {
+    sleep(2000).then(() => {
+        get_messages(chatID).then(jsonMessages => {
+            let scrolled = false;
+
+            lastDate = new Date(0);
+            const chatBox = $(".chat-box:first-of-type");
+            chatBox.html("");
+            if (chatBox[0].scrollHeight - chatBox[0].scrollTop - chatBox[0].clientHeight < 1) {
+                scrolled = true;
+            }
+    
+            for (let message of jsonMessages) {
+                const curDate = new Date(message.date);
+                if ((curDate - lastDate.getTime()) > 60000) {
+                    lastDate.setTime(curDate.getTime());
+                    chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
+                        { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+                }
+    
+                chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
+                <p>${message.message}</p>
+                </div></div>`);
+            }
+            
+            if (scrolled) {
+                chatBox[0].scrollTop = chatBox[0].scrollHeight;
+            }
+            poll_chat_database();
+        });
+    });
+}
+
 /**
  * Asyncronous function for loading multiple json files. 
  * Adapted from https://stackoverflow.com/questions/74125487/load-multiple-json-then-execute-funtion
@@ -259,7 +296,7 @@ async function send_to_server(inputText, relationship, culture) {
         return
     }
 
-    let response = await fetch('http://localhost:5000/api', 
+    let response = await fetch('./api', 
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -284,7 +321,7 @@ async function send_to_server(inputText, relationship, culture) {
  * @param receiverID userID of the receiver
  */
 async function get_chat(senderID, receiverID) {
-    let response = await fetch('http://localhost:5000/get_chat', 
+    let response = await fetch('./get_chat', 
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -307,7 +344,7 @@ async function get_chat(senderID, receiverID) {
  * @param chatID Id of the chat to get all the messages for
  */
 async function get_messages(chatID) {
-    let response = await fetch('http://localhost:5000/get_messages', 
+    let response = await fetch('./get_messages', 
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -331,7 +368,7 @@ async function get_messages(chatID) {
  * @param user user ID
  */
 async function send_message(message, chatID, user) {
-    let response = await fetch('http://localhost:5000/send_message', 
+    let response = await fetch('./send_message', 
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},

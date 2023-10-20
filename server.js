@@ -3,6 +3,16 @@ const express =  require('express');
 const app = express();
 app.use(express.json());
 
+// Going to localhost:5000 will open public/index.html
+const port = 5000;
+
+// All server files people see and get are in the 'public' folder
+app.use(express.static('public'));
+
+app.listen(port, ()=> {
+    console.log("Server is active");
+});
+
 // mysql setup
 var mysql = require('mysql2');
 
@@ -72,17 +82,7 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: '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'
-});
-
-// Going to localhost:5000 will open public/index.html
-const port = 5000;
-
-// All server files people see and get are in the 'public' folder
-app.use(express.static('public'));
-
-app.listen(port, ()=> {
-    console.log("Server is active");
+    apiKey: ''
 });
 
 app.post('/api', async (req, res)=> {
@@ -96,7 +96,7 @@ app.post('/api', async (req, res)=> {
             model: "gpt-3.5-turbo",
             messages: [
                 {"role": "system", "content": "Keep original meaning and convert messages to concise, office appropriate " +
-                "language for an " + req.body.culture + " " + req.body.relationship},
+                "language for a " + req.body.culture + " " + req.body.relationship},
                 {"role": "user", "content": req.body.question}
             ],
         });
