@@ -71,8 +71,21 @@ app.post('/get_chat', async (req, res)=> {
         OR (user1 = '${req.body.user2}' AND user2 = '${req.body.user1}'))`, function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
-        } else {
+        } else if (result.length > 0) {
             res.status(200).json({'result': result});
+        } else {
+            database.query(`INSERT INTO chats (user1, user2)
+            VALUES ('${req.body.user1}', '${req.body.user2}')`, function (err, result, fields) {
+            database.query(`SELECT chats.\`id\` AS chatID, \`user1\`, \`user2\`, \`user2to1Relationship\`,
+            \`user1to2Relationship\`, users.\`culture\` FROM chats, users
+            WHERE users.\`id\` = '${req.body.user1}' AND (user1 = '${req.body.user1}' AND user2 = '${req.body.user2}')`, function (err, result, fields) {
+                if (err) {
+                    res.status(400).json({message: err.message});
+                } else {
+                    res.status(200).json({'result': result});
+                }
+            });
+        });
         }
       });
 });

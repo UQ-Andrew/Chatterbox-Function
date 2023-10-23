@@ -2,6 +2,7 @@
 // const dataURLs = ['./data/rude.json', './data/medium.json', './data/polite.json'];
 
 const userID = 7; // Replace in the future with something (maybe php) for logins
+let receiverID = 3;
 let chatID = 1; // Change for whatever chat is loaded, know which chat to load through get_chat()
 let receiverCulture = "Australian"; // Edit with info from get_chat()
 let relationship = "Boss"; // Edit with info from get_chat()
@@ -51,7 +52,7 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
-    get_chat(userID, 1).then(jsonInfo => {
+    get_chat(userID, receiverID).then(jsonInfo => {
         chatID = jsonInfo.chatID;
         receiverCulture = jsonInfo.culture;
         if (jsonInfo.user2 == userID) {
@@ -149,7 +150,7 @@ $(document).ready(function() {
     $("#email").submit(function (event) {
         if ($('#input').val().length > 0) {
             const chatBox = $(".chat-box:first-of-type");
-            send_message($('#input').val(), 1, userID);
+            send_message($('#input').val(), receiverID, userID);
 
             const now = Date.now();
             if ((now - lastDate.getTime()) > 60000) {
