@@ -1,5 +1,3 @@
-// Json files to load
-// const dataURLs = ['./data/rude.json', './data/medium.json', './data/polite.json'];
 
 const userID = 7; // Replace in the future with something (maybe php) for logins
 let receiverID = 3;
@@ -52,6 +50,53 @@ const polite = {"a": ["appreciate"],
 $(document).ready(function() {
     $("body").addClass("js");
 
+    // Setting up users
+    get_users().then(jsonUsers => {
+        const contacts = $("#contact-list:first-of-type");
+        contacts.html("");
+        for (let user of jsonUsers) {
+            if (user.id != userID) {
+                contacts.append(`<div class="individual_contact" id="${user.id}">
+                ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/icon _profile circle_.png" alt="Profile picture">'}
+                <p>${user.name}</p>
+                </div>`);
+            }
+        }
+        $(".individual_contact").on("click", function(event) {
+            receiverID = $(this).attr('id');
+            get_chat(userID, receiverID).then(jsonInfo => {
+                chatID = jsonInfo.chatID;
+                receiverCulture = jsonInfo.culture;
+                if (jsonInfo.user2 == userID) {
+                    relationship = jsonInfo.user2to1Relationship;
+                } else {
+                    relationship = jsonInfo.user1to2Relationship;
+                }
+        
+                get_messages(chatID).then(jsonMessages => {
+                    const chatBox = $(".chat-box:first-of-type");
+                    chatBox.html("");
+            
+                    for (let message of jsonMessages) {
+                        const curDate = new Date(message.date);
+                        if ((curDate - lastDate.getTime()) > 60000) {
+                            lastDate.setTime(curDate.getTime());
+                            chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
+                                { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+                        }
+            
+                        chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
+                        <p>${message.message}</p>
+                        </div></div>`);
+                    }
+                    
+                    chatBox[0].scrollTop = chatBox[0].scrollHeight;
+                });
+            });
+        });
+    });
+
+    // Getting chat messages
     get_chat(userID, receiverID).then(jsonInfo => {
         chatID = jsonInfo.chatID;
         receiverCulture = jsonInfo.culture;
@@ -83,8 +128,6 @@ $(document).ready(function() {
         });
     });
 
-    //lastDate = new Date($(".chat-box > p:last-of-type").html());
-
     $('#input').keyup(function (event) {
 
         const message = $('#input').val();
@@ -101,16 +144,6 @@ $(document).ready(function() {
             $('#output').append("<i>Warning: A long message may not be properly read, " + 
                 "Consider organising a meetup. </i><br><br>");
         }
-
-
-        /*get_jsons(dataURLs).then(jsonList => {
-            // jsonList = [rude, medium, polite]?
-            const rude = jsonList[0];
-            console.log(rude);
-            const medium = jsonList[1];
-            console.log(medium);
-            const polite = jsonList[2];
-            console.log(polite);*/
 
         let messagePoint = 0;
 
@@ -138,9 +171,6 @@ $(document).ready(function() {
                 } else {
                     //$('#output').append(sentencesEndings[i]);
                 }
-            } else {
-                // Sentence Ending, i.e. one or more '.', '?', '!', or '\n' characters
-                //$('#output').append(sentencesEndings[i]);
             }
 
             messagePoint += sentencesEndings[i].length;
@@ -173,15 +203,6 @@ $(document).ready(function() {
         
         event.preventDefault();
     });
-
-    $("#ai_check").click(function (event) {
-        if ($('#input').val().length > 0) {
-            send_to_server($('#input').val(), relationship, receiverCulture).then(jsonMessage => {
-                $('#input').val(jsonMessage.content);
-            });
-        }
-        event.preventDefault();
-    });
 });
 
 function sleep(ms) {
@@ -195,10 +216,10 @@ async function poll_chat_database() {
 
             lastDate = new Date(0);
             const chatBox = $(".chat-box:first-of-type");
-            chatBox.html("");
             if (chatBox[0].scrollHeight - chatBox[0].scrollTop - chatBox[0].clientHeight < 1) {
                 scrolled = true;
             }
+            chatBox.html("");
     
             for (let message of jsonMessages) {
                 const curDate = new Date(message.date);
@@ -287,32 +308,23 @@ function binary_string_search(arr, el) {
     }
     return ~m;
 }
-/**
- * Function to send data to OPENAI server and get a more appropriate message back
- * Used https://www.freecodecamp.org/news/how-to-create-a-chatbot-with-the-chatgpt-api/ as help
- * @param {String} inputText What to send to the server
- */
-async function send_to_server(inputText, relationship, culture) {
-    if (inputText.trim().length === 0) {
-        return
-    }
 
-    let response = await fetch('./api', 
+/**
+ * Function to get all users
+ */
+async function get_users() {
+    let response = await fetch('./get_users', 
     {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-            'question': inputText,
-            'relationship': relationship,
-            'culture': culture
-        })
+        body: '{}'
     });
         
-    const data = await response.json()
+    const data = await response.json();
 
-    // data.message is the actual message sent back from the server, in this case chatGPT response
-    if (data.message) {
-        return data.message;
+    // data.result is the server response
+    if (data.result) {
+        return data.result;
     }
 }
 

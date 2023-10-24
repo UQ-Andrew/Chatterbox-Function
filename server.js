@@ -34,10 +34,25 @@ database.connect(function(err) {
     }
 });
 
+app.post('/get_users', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    // Users have id, name, picture, culture
+    database.query(`SELECT * FROM users`, function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+      });
+});
+
 app.post('/get_messages', async (req, res)=> {
     if (database == null) {
         return;
     }
+    // Messages have id, date, message, chatID, userID
     database.query(`SELECT * FROM messages WHERE chatID = '${req.body.chatID}'`, function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
@@ -51,6 +66,7 @@ app.post('/send_message', async (req, res)=> {
     if (database == null) {
         return;
     }
+    // Messages have id, date, message, chatID, userID
     database.query(`INSERT INTO messages (message, chatID, userID) VALUES 
         ('${req.body.message}', '${req.body.chatID}', '${req.body.userID}')`, function (err, result, fields) {
         if (err) {
@@ -65,6 +81,7 @@ app.post('/get_chat', async (req, res)=> {
     if (database == null) {
         return;
     }
+    // Chats have id, user1, user2, user1to2Relationship, user2to1Relationship
     database.query(`SELECT chats.\`id\` AS chatID, \`user1\`, \`user2\`, \`user2to1Relationship\`,
         \`user1to2Relationship\`, users.\`culture\` FROM chats, users
         WHERE users.\`id\` = '${req.body.user2}' AND ((user1 = '${req.body.user1}' AND user2 = '${req.body.user2}')
@@ -104,12 +121,25 @@ app.post('/api', async (req, res)=> {
 
         //if (moderationCheck.results[0].flagged == true) {
         //    res.status(400).json({message: moderationCheck.results[0]});
+        userData = "";
+        if (req.body.culture != null && req.body.relationship != null) {
+            userData += req.body.culture + " " + req.body.relationship;
+        } else if (req.body.culture != null) {
+            userData += req.body.culture + " person";
+        } else if (req.body.relationship != null) {
+            userData += req.body.relationship;
+        } else {
+            userData += "Co-worker";
+        }
+
+        console.log("Keep original meaning and convert messages to concise, office appropriate " +
+        "language for a " + userData);
 
         const resp = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
                 {"role": "system", "content": "Keep original meaning and convert messages to concise, office appropriate " +
-                "language for a " + req.body.culture + " " + req.body.relationship},
+                "language for a " + userData},
                 {"role": "user", "content": req.body.question}
             ],
         });
