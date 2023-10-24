@@ -53,7 +53,7 @@ app.post('/get_messages', async (req, res)=> {
         return;
     }
     // Messages have id, date, message, chatID, userID
-    database.query(`SELECT * FROM messages WHERE chatID = '${req.body.chatID}'`, function (err, result, fields) {
+    database.query("SELECT * FROM messages WHERE chatID = ?", [req.body.chatID], function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
         } else {
@@ -66,9 +66,9 @@ app.post('/send_message', async (req, res)=> {
     if (database == null) {
         return;
     }
+    messageData = {message: req.body.message, chatID: req.body.chatID, userID: req.body.userID};
     // Messages have id, date, message, chatID, userID
-    database.query(`INSERT INTO messages (message, chatID, userID) VALUES 
-        ('${req.body.message}', '${req.body.chatID}', '${req.body.userID}')`, function (err, result, fields) {
+    database.query("INSERT INTO messages SET ?", messageData, function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
         } else {
@@ -82,20 +82,25 @@ app.post('/get_chat', async (req, res)=> {
         return;
     }
     // Chats have id, user1, user2, user1to2Relationship, user2to1Relationship
+    // Users have id, name, picture, culture
+    // Specifically checking user2 from users for user2 culture!
     database.query(`SELECT chats.\`id\` AS chatID, \`user1\`, \`user2\`, \`user2to1Relationship\`,
         \`user1to2Relationship\`, users.\`culture\` FROM chats, users
-        WHERE users.\`id\` = '${req.body.user2}' AND ((user1 = '${req.body.user1}' AND user2 = '${req.body.user2}')
-        OR (user1 = '${req.body.user2}' AND user2 = '${req.body.user1}'))`, function (err, result, fields) {
+        WHERE users.\`id\` = ? AND ((user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?))`,
+        [req.body.user2, req.body.user1, req.body.user2, req.body.user2, req.body.user1],
+        function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
         } else if (result.length > 0) {
             res.status(200).json({'result': result});
         } else {
             database.query(`INSERT INTO chats (user1, user2)
-            VALUES ('${req.body.user1}', '${req.body.user2}')`, function (err, result, fields) {
+            VALUES (?, ?)`, [req.body.user1, req.body.user2], function (err, result, fields) {
+            
             database.query(`SELECT chats.\`id\` AS chatID, \`user1\`, \`user2\`, \`user2to1Relationship\`,
             \`user1to2Relationship\`, users.\`culture\` FROM chats, users
-            WHERE users.\`id\` = '${req.body.user1}' AND (user1 = '${req.body.user1}' AND user2 = '${req.body.user2}')`, function (err, result, fields) {
+            WHERE users.\`id\` = ? AND (user1 = ? AND user2 = ?)`,
+            [req.body.user2, req.body.user1, req.body.user2], function (err, result, fields) {
                 if (err) {
                     res.status(400).json({message: err.message});
                 } else {
