@@ -75,23 +75,9 @@ $(document).ready(function() {
                 }
         
                 get_messages(chatID).then(jsonMessages => {
-                    const chatBox = $(".chat-box:first-of-type");
-                    chatBox.html("");
-            
-                    for (let message of jsonMessages) {
-                        const curDate = new Date(message.date);
-                        if ((curDate - lastDate.getTime()) > 60000) {
-                            lastDate.setTime(curDate.getTime());
-                            chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
-                                { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
-                        }
-            
-                        chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
-                        <p>${message.message}</p>
-                        </div></div>`);
-                    }
+                    write_messages_to_chatbox(jsonMessages);
                     
-                    chatBox[0].scrollTop = chatBox[0].scrollHeight;
+                    $(".chat-box:first-of-type")[0].scrollTop = $(".chat-box:first-of-type")[0].scrollHeight;
                 });
             });
         });
@@ -108,23 +94,9 @@ $(document).ready(function() {
         }
 
         get_messages(chatID).then(jsonMessages => {
-            const chatBox = $(".chat-box:first-of-type");
-            chatBox.html("");
-    
-            for (let message of jsonMessages) {
-                const curDate = new Date(message.date);
-                if ((curDate - lastDate.getTime()) > 60000) {
-                    lastDate.setTime(curDate.getTime());
-                    chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
-                        { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
-                }
-    
-                chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
-                <p>${message.message}</p>
-                </div></div>`);
-            }
+            write_messages_to_chatbox(jsonMessages);
             
-            chatBox[0].scrollTop = chatBox[0].scrollHeight;
+            $(".chat-box:first-of-type")[0].scrollTop = $(".chat-box:first-of-type")[0].scrollHeight;
             poll_chat_database()
         });
     });
@@ -206,37 +178,73 @@ $(document).ready(function() {
     });
 });
 
+function write_messages_to_chatbox(jsonMessages) {
+    const chatBox = $(".chat-box:first-of-type");
+    chatBox.html("");
+    let curDate;
+
+    for (let message of jsonMessages) {
+        curDate = new Date(message.date);
+        if ((curDate - lastDate.getTime()) > 60000) {
+            lastDate.setTime(curDate.getTime());
+            chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
+                { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+        }
+
+        if (message.alternateMessage == null || message.userID == userID) {
+            chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
+            <p>${message.message}</p>
+            </div></div>`);
+        } else {
+            chatBox.append(`<div><div>
+            <p>${message.alternateMessage}</p>
+            <p class="hidden">${message.message}</p>
+            <span style="width: 100%;
+            display: block;
+            background-color: salmon;
+            border-radius: 5px;
+            cursor: pointer;" onclick="switch_message(this)">Warning: See original message</span>
+            </div></div>`);
+        }
+    }
+}
+
+function switch_message(button) {
+    const message = $(button).parent();
+    if ($(button).html() == "Warning: See original message") {
+        $(button).html("See updated message");
+        message.css('background-color', 'salmon');
+        message.children('p').eq(0).addClass('hidden');
+        message.children('p').eq(1).removeClass('hidden');
+    } else {
+        $(button).html("Warning: See original message");
+        message.removeAttr('style');
+        message.children('p').eq(1).addClass('hidden');
+        message.children('p').eq(0).removeClass('hidden');
+    }
+}
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 async function poll_chat_database() {
-    sleep(2000).then(() => {
+    sleep(8000).then(() => {
         get_messages(chatID).then(jsonMessages => {
-            let scrolled = false;
+            if (jsonMessages[jsonMessages.length - 1].message != 
+                $(".chat-box:first-of-type > div:last-of-type > div > p:last-of-type").html()) {
+                let scrolled = false;
 
-            lastDate = new Date(0);
-            const chatBox = $(".chat-box:first-of-type");
-            if (chatBox[0].scrollHeight - chatBox[0].scrollTop - chatBox[0].clientHeight < 1) {
-                scrolled = true;
-            }
-            chatBox.html("");
-    
-            for (let message of jsonMessages) {
-                const curDate = new Date(message.date);
-                if ((curDate - lastDate.getTime()) > 60000) {
-                    lastDate.setTime(curDate.getTime());
-                    chatBox.append(`<p> ${new Intl.DateTimeFormat('en-GB', 
-                        { dateStyle: 'medium', timeStyle: 'short'}).format(lastDate)} </p>`);
+                lastDate = new Date(0);
+                const chatBox = $(".chat-box:first-of-type");
+                if (chatBox[0].scrollHeight - chatBox[0].scrollTop - chatBox[0].clientHeight < 1) {
+                    scrolled = true;
                 }
-    
-                chatBox.append(`<div><div ${(message.userID == userID) ? "class='personal'" : ""}>
-                <p>${message.message}</p>
-                </div></div>`);
-            }
-            
-            if (scrolled) {
-                chatBox[0].scrollTop = chatBox[0].scrollHeight;
+                write_messages_to_chatbox(jsonMessages);
+                
+                if (scrolled) {
+                    chatBox[0].scrollTop = chatBox[0].scrollHeight;
+                }
             }
             poll_chat_database();
         });
