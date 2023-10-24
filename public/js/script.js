@@ -1,9 +1,9 @@
 
 const userID = 7; // Replace in the future with something (maybe php) for logins
-let receiverID = 3;
+let receiverID = 1;
 let chatID = 1; // Change for whatever chat is loaded, know which chat to load through get_chat()
-let receiverCulture = "Australian"; // Edit with info from get_chat()
-let relationship = "Boss"; // Edit with info from get_chat()
+let receiverCulture = "Australian"; // Editted with info from get_chat()
+let relationship = "Boss"; // Editted with info from get_chat()
 let lastDate = new Date(0);
 
 const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
@@ -63,6 +63,7 @@ $(document).ready(function() {
             }
         }
         $(".individual_contact").on("click", function(event) {
+            lastDate = new Date(0);
             receiverID = $(this).attr('id');
             get_chat(userID, receiverID).then(jsonInfo => {
                 chatID = jsonInfo.chatID;

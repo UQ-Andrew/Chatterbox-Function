@@ -23,7 +23,7 @@ var database = mysql.createConnection({
     password: 'localhost',
     database: "deco2850"
 });
-  
+
 database.connect(function(err) {
     if (err) {
         console.log(err);
@@ -32,6 +32,50 @@ database.connect(function(err) {
     } else {
         console.log("Connected to database!");
     }
+});
+
+app.post('/login', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    // Users have id, name, picture, culture
+    database.query("SELECT * FROM users WHERE name = ?", [req.body.name], function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+      });
+});
+
+app.post('/signup', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    // Users have id, name, picture, culture
+    userData = {name: req.body.name, culture: req.body.culture};
+    database.query("INSERT INTO users SET ?", userData, function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+      });
+});
+
+app.post('/update_user', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    // Users have id, name, picture, culture
+    userData = {name: req.body.name, culture: req.body.culture, picture: req.body.picture};
+    database.query("UPDATE users SET ? WHERE id = ?", [userData, req.body.id], function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+      });
 });
 
 app.post('/get_users', async (req, res)=> {
