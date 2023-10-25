@@ -7,80 +7,189 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="top_bar">
-        <img src="images/logo_bg_removed.png" alt="Company Logo" id="logo">
-        <nav>
-            <img src="images/icon _messages 2_.png" alt="message">
-            <img src="images/icon _profile circle_.png" alt="profile">
-            <img src="images/icon _setting 2_.png" alt="_setting">
-        </nav>
+    <!-- The main container -->
+    <div id="main-container">
+
+    <!-- Navigation Container on the left -->
+    <div id="nav-container">
+        <div id="profile_grid" >
+            <img id='user_profile' src="images/icon _profile circle_.png"  >
+            <div id="user_infor" >
+                <p id="user_name" >James Joyce</p>
+                <p id="user_email">james.j@company.com</p>
+            </div>
+        </div>
     </div>
 
-    <div class="chat-interface">
+    <div id="contact_flex_box"></div>
 
-        <section class="contact-container">
-            <div id="contact-list">
-                <div class="individual_contact">
-                    <img src="images/Lion.png" alt="profile" >
-                    <p>Jambo Saunders</p>
-                </div>
-                <div class="individual_contact">
-                    <img src="images/Cat.png" alt="profile" >
-                    <p>Abrar Hashim</p>
-                </div>
-                <div class="individual_contact">
-                    <img src="images/Dolphin.png" alt="profile" >
-                    <p>Nikolas</p>
-                </div>
-                <div class="individual_contact">
-                    <img src="images/Bird.png" alt="profile" >
-                    <p>Eleonora</p>
-                </div>
-                <div class="individual_contact">
-                    <img src="images/Animal.png" alt="profile" >
-                    <p>James</p>
-                </div>
-                <div class="individual_contact">
-                    <img src="images/Animal2.png" alt="profile" >
-                    <p>Miroslava Morosov</p>
-                </div>
-
+    <!-- Tab labels -->
+    <!-- <div id="tabs-bar"> -->
+        <!-- <div id="tab-items-container"> -->
+    <input type="radio" name="feature" value="message" id="messageRadio" checked>
+    <input type="radio" name="feature" value="friends" id="friendsRadio">
+    <label class="radio-container" id="message_btn" for="messageRadio">
+        <div class="tab-items" id="content1">
+            <img src="images/messages_icon.png">
+            <div>Messages</div>
+            <div></div>
+            <div id="message_num">
+                <div id="circle">5</div>
             </div>
+        </div>
+    </label>
+    <label class="radio-container" id="friends_btn" for="friendsRadio">
 
-        </section>
+        <div class="tab-items" id="content2">
+            <img src="images/friends_icon.png" >
+            <div>Friends</div>
+        </div>
+    </label>
+    <input type="radio" name="feature" value="setting" id="settingRadio">
+
+    <label class="radio-container" id="setting_btn" for="settingRadio">
+        <div class="tab-items" id="content3">
+            <img src="images/setting_icon.png" >
+            <div>Settings</div>
+        </div>
+    </label>
+    <!-- </div> -->
+    <!-- </div> -->
 
 
-        <section class="chat-room">
 
-            <div class="chat-box">
-                <p>4 Sept 2023, 12:35</p>
-				<div>
-					<div>
-						<p>Have you sent through the reports?</p>
-					</div>
-				</div>
-				<p>5 Sept 2023, 10:05</p>
-				<div>
-					<div class="personal">
-						<p>Sorry for the delay, they will be sent through shortly.</p>
-					</div>
-				</div>
-            </div>
+    <!-- The funcation container on the right -->
+    <div id="function-container">
 
-            <form id="email" method="post">
-                <textarea type="text" id="input" name="input" placeholder="Message"></textarea>
-                <button id="send_btn" type="submit">Send</button>
-                <button id="ai_check">Check with AI</button>
-            </form>
+        <div id="logo_bar">
+            <img src="images/logo_bg_removed.png" alt="Company Logo" id="logo" >
+            <h3>Chatterbox</h3>  
+        </div>
 
-            <div id="output-container" class="hidden">
-                <p id="output"></p>
-            </div>
+        <!-- The Messages Tab -->
+        
+        <div class="chat-interface">
+
+            <div class="message_tab_title section messages">&nbsp &nbsp Messages</div>
+            <div class="message_tab_title section friends">&nbsp &nbsp Friends</div>
+
+            <div id="tab-content-container"> 
+                <section class="friends-content friends-class section friends">
+                    <div class="team-title-flex section friends">
+                 
+                        <div>Your Team</div>
+                        <div>Team A</div>
+                        <div>Your Team</div>
+                    </div>
+                    <div class="friends-container section friends">
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Kira Smith</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                        <div class="friend_name"> 
+                            <img src="images/inverse_profile.png" >
+                            <p>Name</p>
+                        </div>
+                </section>
             
-        </section>
+
+
+
+                <section class="chat-room chat-room-content messages section">
+                    
+                    <div class="chat-box">
+                        <p>4 Sept 2023, 12:35</p>
+                        <div>
+                            <div>
+                                <p>Have you sent through the reports?</p>
+                            </div>
+                        </div>
+                        <p>5 Sept 2023, 10:05</p>
+                        <div>
+                            <div class="personal">
+                                <p>Sorry for the delay, they will be sent through shortly.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form id="email" method="post">
+                        <textarea type="text" id="input" name="input" placeholder="Message"></textarea>
+                        <button id="send_btn" type="submit"><img src="images/send.png"></button>
+                        <button id="ai_check">Check with AI</button>
+                    </form>
+
+                    <div id="output-container" class="hidden">
+                        <p id="output"></p>
+                    </div>
+                    
+                </section>
+                
+                <div  class="section messages chat-room-contact chat-room-content">
+                    <input class='chat-search-bar' type="text" placeholder="Search..">
+
+                    <div class="all_contacts" id="contact-list">
+                        <div class="individual_contact current-contact">
+                            <img src="images/icon _profile circle_.png">
+                            <p>Rudy</p>
+                        </div>
+
+                        <div class="contacts">
+                            <img src="images/icon _profile circle_.png">
+                            <p>Kira</p>
+                        </div>
+
+                        <div class="contacts">
+                            <img src="images/icon _profile circle_.png">
+                            <p>Kayra</p>
+                        </div>
+
+                        <div class="contacts">
+                            <img src="images/icon _profile circle_.png">
+                            <p>Antonia</p>
+                        </div>
+                    </div>
+
+                </div> 
+
+            </div>
+
+
+            
+        </div>
+        <!-- The Friends Tab -->
+        <div></div>
+        <!-- The Settings Tab -->
+    </div>
+
 
     </div>
 
+
+ 
     <div class="animation">
         <ul class="lines">
                 <li></li>

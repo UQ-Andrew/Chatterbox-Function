@@ -57,7 +57,7 @@ $(document).ready(function() {
         for (let user of jsonUsers) {
             if (user.id != userID) {
                 contacts.append(`<div class="individual_contact" id="${user.id}">
-                ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/icon _profile circle_.png" alt="Profile picture">'}
+                ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/inverse_profile.png" alt="Profile picture">'}
                 <p>${user.name}</p>
                 </div>`);
             }

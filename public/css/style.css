@@ -10,36 +10,181 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
+    background-color: #dcdcdc;
+}
+textarea[type="text"]::placeholder {
+             
+    /* Firefox, Chrome, Opera */
+    text-align: left;
+    border-radius: 5%;
+
 }
 
-#top_bar{
-    display: flex;
-    justify-content: space-between;
+#logo_bar{
+    display: grid;
     height: 10%;
+    grid-template-columns: [first] 80% [line2] 50px [line3] 10% [end];
+    grid-template-rows: [row1-start] 100%;
+
+}
+
+#main-container{
+    display: grid;
+    grid-template-columns: [first] 15% [second] 85% ;
+    grid-template-rows: [row-1] 15% [row-2] 12% [row-3] 12% [row-4] 12% [row-5] 49% [row-6];
+    height: 100%;
+}
+
+#nav-container{
+    grid-row-start: row-1;
+    grid-row-end: row-2;
+    grid-column-start: first;
+    grid-column-end: first;
+    background-color: #B8B8B8;
+}
+
+input[type="radio"] {
+    visibility: hidden;
+}
+
+#message_btn{
+    grid-row-start: row-2;
+    grid-row-end: row-3;
+    grid-column-start: first;
+    grid-column-end: first;
+    width: 100%;
+    background-color: #B8B8B8;
+}
+
+.tab-items img{
+    padding-left: 10px;
+}
+
+#setting_btn{
+    grid-row-start: row-4;
+    grid-row-end: row-5;
+    grid-column-start: first;
+    grid-column-end: first;
+    background-color: #B8B8B8;
+}
+
+#messageRadio{
+    width: 10%;
+}
+
+#friends_btn{
+    grid-row-start: row-3;
+    grid-row-end: row-4;
+    grid-column-start: first;
+    grid-column-end: first;
+    background-color: #B8B8B8;
+}
+
+#function-container{
+    grid-row-start: row-1;
+    grid-row-end: row-6;
+    grid-column-start: second;
+    grid-column-end: second;
+    /*background-color: brown;
+    background-image: url('../images/background.png');*/
+    height: 100%;
 }
 
 #logo {
     width: auto;       
-    height: 100px;      
-    margin-top: 15px;
-    margin-left: 30px;
+    height: 50px;      
+    margin-top: 25px;
+    /* margin-left: 30px; */
+    grid-row-start: row1-start;
+    grid-row-end: row1-start;
+    grid-column-start: line2;
+    grid-column-end: line3;
+    padding: 0px 0px 0px 0px
+
 }
 
-nav{
-    margin-top: 30px;
-    margin-right: 50px;
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
+#logo_bar h3{
+    grid-row-start: row1-start;
+    grid-row-end: row1-start;
+    grid-column-start: line3;
+    grid-column-end: end;
+    color: white;
+    padding: 25px 0px 0px 10px;
+    text-indent: 5%;
+    letter-spacing:1px;
 }
 
-nav img{
-    width: 25px;
-    height: 25px;
+
+
+
+#profile_grid{
+    display: grid;
+    grid-template-rows: [row-1] 10% [row-2] 15% [row-3] 40% [row-4] 25% [row-5] 5%;
+    grid-template-columns: [col-1] 10% [col-2] 35% [col-3] 45% [col-4] 5% [col-5] 5%;
+}
+#user_profile{
+    grid-row-start: row-2;
+    grid-row-end: row-3;
+    grid-column-start: col-2;
+    grid-column-end: col-2;
+    overflow: hidden;
+}
+#user_name{
+    font-size: large;
+    margin: 0;
+}
+
+#user_email{
+    font-size: xx-small;  
+    margin: 0;
+
+}
+
+#user_infor{
+    /* display: flex;
+    flex-direction: column; */
+    grid-row-start: row-3;
+    grid-row-end: row-4;
+    grid-column-start: col-3;
+    grid-column-end: col-5;
+    width: 100%;    
+    /* border: 4px dotted red; */
+
+}
+
+.chat-room-contact{
+    grid-row-start: row-2;
+    grid-row-end: row-3;
+    grid-column-start: col-1;
+    grid-column-end: col-1;
+    display: grid;
+    grid-template-columns: [col-1] 5% [col-2] 90% [col-3] 5%;
+    grid-template-rows: [row-1] 4em [row-2] 100%;
+    height: 100%;
+}
+.all_contacts{
+    grid-row-start:row-2;
+    grid-row-end: row-3;
+    grid-column-start:col-2;
+    grid-column-end: col-2;
+    margin-top: 5px;
+}
+
+#chat-room-contact input[type=text] {
+    border: none;
+    font-size: 10px;
+    border-radius: 15px;
+    box-shadow: 1px 1px 1px gray;  
+    grid-row-start: row-1;
+    grid-row-end: row-1;
+    grid-column-start: col-2;
+    grid-column-end: col-2;
 }
 
 .chat-interface{
-    height: 90%;
+    border-radius: 10px;
+    height: 85%;
+    margin-top: 5px;
     display: grid;
     grid-template-columns: [first] 1em [line2] 10% [line3] 1em [col4-start] 1fr [five] 1em [end];
     grid-template-rows: [row1-start] 5% [row1-end] auto [third-line] 5% [last-line];
@@ -47,45 +192,169 @@ nav img{
     justify-items: center;
 }
 
+
+.message_tab_title{
+    width: 100%;
+    border-radius: 5px;
+    grid-column-start: line2;
+    grid-column-end: five;
+    grid-row-start: row1-start;
+    grid-row-end: row1-start;
+    background-color:#B8B8B8;
+    display: flex;
+    align-items: center;
+    letter-spacing: 1px;
+}
+
+#tabs-bar{
+    display: grid;
+    grid-template-columns: [col-1] 5% [col-2] 90% [col-3] 5%;
+    grid-template-rows: [row-1] 100% [row-2];
+}
+
+/* #tab-items-container{
+    display: grid;
+    grid-row-start: row-1;
+    grid-row-end: row-1;
+    grid-column-start: col-2;
+    grid-column-end: col-2;
+
+} */
+
+.tab-items{
+    display: flex;
+    justify-content:flex-start;
+    align-items: center;
+    gap: 10px;
+    margin: 5%;
+    font-weight: bold;
+}
+#message_num{
+    margin-left: 5%;
+}
+#circle{
+    height: 30px;
+    width: 30px;
+    background-color: #494949;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: white;
+}
+
+#tab-content-container{
+    background-color:#B1AFAF;
+    grid-row-start: row1-end;
+    grid-row-end: thrid-line;
+    grid-column-start: line2;
+    grid-column-end: five;
+    width: 100%;
+    display: grid;
+    grid-template-columns: [col-1] 15% [col-2] 80% [col-3] 5%;
+    grid-template-rows: [row-1] 5% [row-2] 90% [row-3] 5%;
+    border-radius: 10px;
+    overflow: hidden;
+
+}
+
+.friends-content{
+    display: grid;
+    grid-template-rows: [row-1] 5% [row-2] 10% [row-3] 35% [row-4] 35% [row-5] 10% [row-6] 5%;
+    grid-template-columns: [col-1] 2% [col-2] 48% [col-3] 48% [col-4] 2% ;
+    width: 100%;
+    overflow: hidden;
+    grid-row-start: row-1;
+    grid-row-end: row-4;
+    grid-column-start: col-1;
+    grid-column-end: col-4;
+}
+
+.team-title-flex{
+    display: flex;
+    justify-content:space-around;
+    align-items: center;
+    grid-row-start: row-2;
+    grid-row-end: row-2;
+    grid-column-start: col-2;
+    grid-column-end: col-4;
+    height: 100%;
+    background-color: #b8b8b8;
+
+}
+
+
+.friends-container{
+    border-radius: 0px 0px 10px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Adjust this value as needed */
+    width: 100%;
+    grid-column-start: col-2;
+    grid-column-end: col-4;
+    grid-row-start: row-3;
+    grid-row-end: row-6;
+    width: 100%;
+    justify-content: space-around;
+    overflow: hidden;
+    text-align: center;
+    align-items: center;
+    background-color: #494949;
+}
+
+.friend_name{
+    flex-basis: 20%;
+    color: white;
+}
+
+.friends img{
+    width: 100px;
+}
+
 /* chat-interface -> contact-container */
 .contact-container{
-    background-color:rgba(78, 78, 78, 0.95);
+    background-color:#B8B8B8;
     border-radius: 5px;
     height: min-content;
     color: white;
     width: 100%;
-    grid-column-start: line2;
-    grid-column-end: line3;
-    grid-row-start: row1-end;
-    grid-row-end: third-line;
+    grid-column-start: col-1;
+    grid-column-end: col-2;
+    grid-row-start: row-1;
+    grid-row-end: row-2;
     display: flex;
     flex-direction: column;
     align-items:  stretch;
 }
 
 /* chat-interface -> contact-container -> contact-list*/
-#contact-list{
+#contact-list {
     display: flex;
-    border-radius: 5px;
+    /* border-radius: 5px; */
     flex-direction: column;
+    height: 90%;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 /* chat-interface -> contact-container -> contact-list -> individual_contact */
 .individual_contact {
     cursor: pointer;
-    background-color: #D9D9D9;
-    padding-top: 0.3em;
-    padding-bottom: 0.3em;
+    padding-left: 5px;
     display: flex;
+    width: 100%;
+    height: 2.8em;
     align-items: center;
     color: #000000;
     font-weight: bold;
     text-align: left;
-    overflow: hidden;
+    margin-bottom: 0.8em;
+    border-radius: 0.5em;
 }
 
 .individual_contact img {
-    width: 35%;
+    width: 30%;
     margin-right: 5%;
     border-radius: 50%;
     height: auto;
@@ -96,7 +365,7 @@ nav img{
     background-color: #FD648C;
 }
 
-/* chat-interface -> chat-room */
+/* chat-interface -> chat-room  kk*/
 .chat-room {
     display: grid;
     grid-template-columns: [first] 2% [line2] 2fr [line3] 0.25fr [col4-start] 2% [end] ;
@@ -107,10 +376,10 @@ nav img{
     height: 100%;
     width: 100%;
     overflow: hidden;
-    grid-column-start: line3;
-    grid-column-end: 5;
-    grid-row-start: row1-end;
-    grid-row-end: third-line;
+    grid-column-start: col-2;
+    grid-column-end: col-3;
+    grid-row-start: row-2;
+    grid-row-end: row-2;
 }
 
 /* chat-interface -> chat-room -> chat-box */
@@ -127,6 +396,68 @@ nav img{
 	overflow: auto;
     text-align: center;
     color: white;
+}
+
+.section{
+    visibility: hidden;
+}
+
+/* Show the section(s) when the "cat" radio button is checked */
+#messageRadio:checked ~ #function-container .chat-interface .messages {
+    visibility: visible !important;
+}
+#messageRadio:checked ~ #message_btn #content1 {
+    background-color: rgba(254, 81, 1, 0.56) !important;
+    border-radius: 10px;
+    opacity: 90%;
+    height: 50px;
+    box-shadow: 1px 1px 1px gray;  
+
+    
+
+}
+
+#friendsRadio:checked ~ #friends_btn #content2 {
+    background-color: rgba(254, 81, 1, 0.56) !important;
+    border-radius: 10px;
+    opacity: 90%;
+    height: 50px;
+    box-shadow: 1px 1px 1px gray;  
+
+
+}
+
+.current-contact {
+    background-color: rgba(254, 81, 1, 0.56) !important;
+    border-radius: 10px;
+    opacity: 90%;
+    height: 20%;
+    box-shadow: 1px 1px 1px gray;  
+
+}
+
+#messageRadio:checked ~ #function-container .chat-interface .chat-search-bar {
+    border: none;
+    font-size: 0.8em;
+    height: 4em;
+    border-radius: 1em;
+    box-shadow: 1px 1px 1px gray;
+    grid-row-start: row-1;
+    /* grid-row-end: row-1; */
+    grid-column-start: col-2;
+}
+
+/* #messageRadio:checked ~ #function-container .chat-interface .message_tab_title {
+    visibility: visible;
+} */
+
+/* Show the section when the "bird" radio button is checked */
+#friendsRadio:checked ~ #function-container #tab-content-container .friends {
+    visibility: visible;
+}
+
+#friendsRadio:checked ~ #function-container .chat-interface .friends {
+    visibility: visible;
 }
 
 ::-webkit-scrollbar {
@@ -181,13 +512,14 @@ nav img{
     background-color: #58C285;
     color: white;
     font-weight: bold;  
-    grid-column-start: third_col;
+    grid-column-start: fourth_col;
     grid-column-end: fourth_col;
     grid-row-start: first_row;
     grid-row-end: second_row;
-    border-radius: 5px;
-    height: 100%;
-    align-self:last baseline;
+    margin: 0px 10px 0px 0px;
+    border-radius: 25px 25px 25px 25px;
+    width: 50px;    
+    align-self:center;
     font-size: large;
 }
 
@@ -202,7 +534,14 @@ nav img{
     grid-row-start: first_row;
     grid-row-end: second_row;
     grid-column-start: first_col;
-    grid-column-end: second_col; 
+    grid-column-end: col4-start; 
+}
+
+#ai_chack{
+    grid-row-start: second_row;
+    grid-row-end: second_row;
+    grid-column-start: first_col;
+    grid-column-end: fourth_col; 
 }
 
 /* Andrew */
@@ -235,6 +574,11 @@ nav img{
     border-radius: 5px;
     color: white;   
 }
+#contact_flex_box{
+    /* display: flex; 
+    flex-direction: column */
+    background-color: #B8B8B8;
+}
 
 .hidden {
 	display: none !important;
@@ -250,6 +594,7 @@ nav img{
     grid-template-columns: [first_col] 1fr [second_col] 10px [third_col] 125px [fourth_col];
     grid-template-rows: [first_row] 100% [second_row];
 }
+
 
 /* Spinning lines animation */
 .animation {
@@ -380,7 +725,7 @@ nav img{
 .middle_module{
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.77);
-    width: 30%;
+    width: 25%;
     height: 65%;
     text-align: center;
     position: absolute;
@@ -399,19 +744,30 @@ nav img{
     font-weight: 400;
     line-height: normal;
     margin: 20px;
-    
 }
-.start_button{
-    background-color: #FD648C;
-    color: white;
-    padding: 10px;
+
+.next_button , .back_button{
+    padding: 10px 30px 10px 30px;
     border-radius: 8px;
     text-decoration: none;
+    width: 100%
+}
+
+.back_button{
+    background-color: #FD648C;
+    margin: 0px 10px 0px 0px;
+}
+
+.next_button{
+    background-color: #FDFE01;
+    margin: 0px 10px 0px 0px;
 
 }
+
 .tl_img{
     width:10%;
 }
+
 .middle_module_intro{
     border-radius: 15px;
     background: rgba(0, 0, 0, 0.93);
@@ -424,11 +780,9 @@ nav img{
     padding: 10px 30px 10px 30px;
 }
 form{
-    text-align: center;
-    /* background-color: white; */
-    /* padding: 15px; */
-    
+    text-align: center;    
 }
+
 .text_in{
 
     margin: 5px 0 10px 0;
