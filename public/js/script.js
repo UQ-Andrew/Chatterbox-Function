@@ -60,6 +60,9 @@ $(document).ready(function() {
                 ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/inverse_profile.png" alt="Profile picture">'}
                 <p>${user.name}</p>
                 </div>`);
+            } else {
+                $("#user_name").html(user.name);
+                $("#user_profile").attr("src",(user.picture != null) ? user.picture : "images/icon _profile circle_.png");
             }
         }
         $(".individual_contact").on("click", function(event) {
