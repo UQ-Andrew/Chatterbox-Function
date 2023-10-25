@@ -4,6 +4,7 @@ $(document).ready(function() {
             send_to_server($('#input').val(), relationship, receiverCulture).then(jsonMessage => {
                 $('#input').val(jsonMessage.content);
             });
+            rude_check();
         }
         event.preventDefault();
     });

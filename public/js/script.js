@@ -73,6 +73,7 @@ $(document).ready(function() {
                 } else {
                     relationship = jsonInfo.user1to2Relationship;
                 }
+                $("#relationship").val(relationship);
         
                 get_messages(chatID).then(jsonMessages => {
                     write_messages_to_chatbox(jsonMessages);
@@ -92,6 +93,7 @@ $(document).ready(function() {
         } else {
             relationship = jsonInfo.user1to2Relationship;
         }
+        $("#relationship").val(relationship);
 
         get_messages(chatID).then(jsonMessages => {
             write_messages_to_chatbox(jsonMessages);
@@ -102,54 +104,10 @@ $(document).ready(function() {
     });
 
     $('#input').keyup(function (event) {
-
-        const message = $('#input').val();
-
-        // Ending up using a wierd array structure where every second element is a sentence ending (., !, ?, or \n)
-		const sentencesEndings = message.split(/([.!?\n]+)/);
-
-        $('#output-container').addClass("hidden");
-        $('#output-container').html("<p id='output'></p>");
-
-        // Length Warning
-        if (message.length > 200) {
-            $('#output-container').removeClass("hidden");
-            $('#output').append("<i>A long message may not be properly read, " + 
-                "Consider organising a meetup.</i><br><br>");
+        if (relationship == "Friend") {
+            return;
         }
-
-        let messagePoint = 0;
-
-        for (let i = 0; i < sentencesEndings.length; i++) {
-
-            /* Old thing for debugging
-            console.log("messagePoint: %d, sentence length: %d, sentence: %s", 
-                messagePoint, sentencesEndings[i].length, sentencesEndings[i]);*/
-
-            if ((sentencesEndings % 2) != 0) {
-                // Sentence
-                let words = sentencesEndings[i].toLowerCase().match(/\b(\w+)\b/g);
-
-                if (search_string_with_dict(words, rude)) {
-                    // Very rude word found in this sentence
-                    $('#output-container').removeClass("hidden");
-                    $('#output-container').addClass("rude");
-                    $('#output').append("Warning, this sentence may be rude: <b>" + sentencesEndings[i] + "</b><br>");
-                    return;
-                } else if (search_string_with_dict(words, medium) && !search_string_with_dict(words, polite)) {
-                    // Maybe somewhat rude sentence found, probably subject to false positives and negatives
-                    // e.g. A command like 'Work on that' or 'no' without words like 'could', 'thank' or 'please'
-                    $('#output-container').removeClass("hidden");
-                    $('#output-container').addClass("rude");
-                    $('#output').append("Warning, this sentence may be slightly rude: <i>" + sentencesEndings[i] + "</i><br>");
-                    return;
-                } else {
-                    //$('#output').append(sentencesEndings[i]);
-                }
-            }
-
-            messagePoint += sentencesEndings[i].length;
-        }
+        rude_check();
     });
 
     $("#email").submit(function (event) {
@@ -184,6 +142,11 @@ $(document).ready(function() {
         }
         
         event.preventDefault();
+    });
+
+    $("#relationship").on("change", function (event) {
+        relationship = $("#relationship").val();
+        console.log(relationship);
     });
 });
 
@@ -258,6 +221,56 @@ async function poll_chat_database() {
             poll_chat_database();
         });
     });
+}
+
+function rude_check() {
+    const message = $('#input').val();
+
+    // Ending up using a wierd array structure where every second element is a sentence ending (., !, ?, or \n)
+    const sentencesEndings = message.split(/([.!?\n]+)/);
+
+    $('#output-container').addClass("hidden");
+    $('#output-container').html("<p id='output'></p>");
+
+    // Length Warning
+    if (message.length > 200) {
+        $('#output-container').removeClass("hidden");
+        $('#output').append("<i>A long message may not be properly read, " + 
+            "Consider organising a meetup.</i><br><br>");
+    }
+
+    let messagePoint = 0;
+
+    for (let i = 0; i < sentencesEndings.length; i++) {
+
+        /* Old thing for debugging
+        console.log("messagePoint: %d, sentence length: %d, sentence: %s", 
+            messagePoint, sentencesEndings[i].length, sentencesEndings[i]);*/
+
+        if ((sentencesEndings % 2) != 0) {
+            // Sentence
+            let words = sentencesEndings[i].toLowerCase().match(/\b(\w+)\b/g);
+
+            if (search_string_with_dict(words, rude)) {
+                // Very rude word found in this sentence
+                $('#output-container').removeClass("hidden");
+                $('#output-container').addClass("rude");
+                $('#output').append("Warning, this sentence may be rude: <b>" + sentencesEndings[i] + "</b><br>");
+                return;
+            } else if (search_string_with_dict(words, medium) && !search_string_with_dict(words, polite)) {
+                // Maybe somewhat rude sentence found, probably subject to false positives and negatives
+                // e.g. A command like 'Work on that' or 'no' without words like 'could', 'thank' or 'please'
+                $('#output-container').removeClass("hidden");
+                $('#output-container').addClass("rude");
+                $('#output').append("Warning, this sentence may be slightly rude: <i>" + sentencesEndings[i] + "</i><br>");
+                return;
+            } else {
+                //$('#output').append(sentencesEndings[i]);
+            }
+        }
+
+        messagePoint += sentencesEndings[i].length;
+    }
 }
 
 /**

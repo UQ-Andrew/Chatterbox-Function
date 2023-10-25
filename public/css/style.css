@@ -245,18 +245,17 @@ input[type="radio"] {
 }
 
 #tab-content-container{
-    background-color:#B1AFAF;
+    background-color: #B1AFAF;
     grid-row-start: row1-end;
     grid-row-end: thrid-line;
     grid-column-start: line2;
     grid-column-end: five;
     width: 100%;
     display: grid;
-    grid-template-columns: [col-1] 15% [col-2] 80% [col-3] 5%;
+    grid-template-columns: [col-1] 15% [col-2] 82% [col-3] 3%;
     grid-template-rows: [row-1] 5% [row-2] 90% [row-3] 5%;
     border-radius: 10px;
     overflow: hidden;
-
 }
 
 .friends-content{
