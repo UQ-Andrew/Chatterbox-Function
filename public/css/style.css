@@ -116,7 +116,6 @@ input[type="radio"] {
 
 
 
-
 #profile_grid{
     display: grid;
     grid-template-rows: [row-1] 10% [row-2] 15% [row-3] 40% [row-4] 25% [row-5] 5%;
@@ -130,6 +129,8 @@ input[type="radio"] {
     overflow: hidden;
     width: 90%;
     border-radius: 50%;
+    object-fit: cover;
+    max-height: 5em;
 }
 #user_name{
     font-size: large;
@@ -505,44 +506,6 @@ input[type="radio"] {
 	float: right;
 }
 
-/* chat-interface -> chat-room -> email -> send_btn */
-#send_btn {
-    cursor: pointer;
-    background-color: #58C285;
-    color: white;
-    font-weight: bold;  
-    grid-column-start: fourth_col;
-    grid-column-end: fourth_col;
-    grid-row-start: first_row;
-    grid-row-end: second_row;
-    margin: 0px 10px 0px 0px;
-    border-radius: 25px 25px 25px 25px;
-    width: 50px;    
-    align-self:center;
-    font-size: large;
-}
-
-#send_btn:hover {
-    transition: 0.5s;
-    background-color: #459767;
-}
-
-/* chat-interface -> chat-room -> email -> input */
-#input{
-    border-radius: 5px;
-    grid-row-start: first_row;
-    grid-row-end: second_row;
-    grid-column-start: first_col;
-    grid-column-end: col4-start; 
-}
-
-#ai_chack{
-    grid-row-start: second_row;
-    grid-row-end: second_row;
-    grid-column-start: first_col;
-    grid-column-end: fourth_col; 
-}
-
 /* Andrew */
 .container {
 	background: white;
@@ -584,16 +547,127 @@ input[type="radio"] {
 }
 
 /* chat-interface -> chat-room -> email */
-#email{
+#email {
     grid-row-start: third-line;
     grid-row-end: third-line;
     grid-column-start: line2;
     grid-column-end: col4-start;
-    display: grid;
-    grid-template-columns: [first_col] 1fr [second_col] 10px [third_col] 125px [fourth_col];
-    grid-template-rows: [first_row] 100% [second_row];
+    display: flex;
 }
 
+#email > div {
+    position: relative;
+    width: 88%;
+    background-color: white;
+    border-radius: 0.5em;
+    text-align: left;
+}
+
+#email > div.double_open {
+    position: relative;
+    width: 48%;
+    background-color: white;
+    border-radius: 0.5em;
+    text-align: left;
+}
+
+#email > #ai_input {
+    background-color: #8a8a8a;
+}
+
+#email > #ai_input > p {
+    margin: 0;
+}
+
+/* chat-interface -> chat-room -> email -> input */
+#email textarea {
+    border-radius: 0.5em;
+    border: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    transition: 0.5s;
+    resize: none;
+}
+
+#ai_check {
+    min-width: 10%;
+    border-radius: 5px;
+    resize: none;
+    margin-left: auto;
+    transition: 0.5s;
+}
+
+#ai_check:hover {
+    background-color: gray;
+}
+
+.loader {
+    margin: auto;
+    margin-top: 1%;
+    border: 0.5em solid white;
+    border-radius: 50%;
+    border-top: 0.5em solid #71CCFF;
+    width: 1.5em;
+    height: 1.5em;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+  
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+/* chat-interface -> chat-room -> email -> send_btn */
+#email .send_btn {
+    position: absolute;
+    right: 0.5em;
+    top: 10%;
+    cursor: pointer;
+    background-color: #58C285;
+    color: white;
+    font-weight: bold;
+    border-radius: 1em;
+    width: 2.7em;
+    height: 2.2em;
+    font-size: large;
+    transition: 0.5s;
+}
+
+#email .send_btn:hover {
+    background-color: #459767;
+}
+
+#email button:disabled {
+    cursor: auto;
+    background-color: #828282 !important;
+}
+
+#email .move_btn {
+    cursor: pointer;
+    background-color: red;
+    color: white;
+    font-weight: bold;
+    border: 0;
+    width: 1.3em;
+    height: 100%;
+    margin-left: 1%;
+    margin-right: 1%;
+    border-radius: 1em;
+    font-size: large;
+    transition: 0.5s;
+}
+
+#email .move_btn:hover {
+    background-color: darkred;
+}
 
 /* Spinning lines animation */
 .animation {

@@ -146,8 +146,15 @@
                     </div>
 
                     <form id="email" method="post">
-                        <textarea type="text" id="input" name="input" placeholder="Message"></textarea>
-                        <button id="send_btn" type="submit"><img src="images/send.png"></button>
+                        <div>
+                            <textarea type="text" id="input" name="input" placeholder="Message"></textarea>
+                            <button id="send_btn" class="send_btn" type="submit"><img src="images/send.png"></button>
+                        </div>
+                        <button id="move_btn" class="move_btn hidden">&lt;</button>
+                        <div id="ai_input" class="hidden">
+                            <p></p>
+                            <button class="send_btn" type="button"><img src="images/send.png"></button>
+                        </div>
                         <button id="ai_check">Check with AI</button>
                     </form>
                     <div id="output-container" class="hidden">

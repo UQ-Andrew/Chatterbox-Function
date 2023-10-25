@@ -186,7 +186,7 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: ''
+    apiKey: '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'
 });
 
 app.post('/api', async (req, res)=> {
