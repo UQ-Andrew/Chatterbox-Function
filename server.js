@@ -122,6 +122,30 @@ app.post('/send_message', async (req, res)=> {
       });
 });
 
+app.post('/update_relationship', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    // Chats have id, user1, user2, user1to2Relationship, user2to1Relationship
+    database.query("UPDATE chats SET ? WHERE id = ? AND user1 = ?", [{user1to2Relationship: req.body.relationship}, req.body.chatID, req.body.sender], function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            if (result.affectedRows == 0) {
+                database.query("UPDATE chats SET ? WHERE id = ? AND user2 = ?", [{user2to1Relationship: req.body.relationship}, req.body.chatID, req.body.sender], function (err, result, fields) {
+                    if (err) {
+                        res.status(400).json({message: err.message});
+                    } else {
+                        res.status(200).json({'result': result});
+                    }
+                });
+            } else {
+                res.status(200).json({'result': result});
+            }
+        }
+    });
+});
+
 app.post('/get_chat', async (req, res)=> {
     if (database == null) {
         return;
@@ -162,7 +186,7 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: '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'
+    apiKey: ''
 });
 
 app.post('/api', async (req, res)=> {

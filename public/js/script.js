@@ -146,7 +146,7 @@ $(document).ready(function() {
 
     $("#relationship").on("change", function (event) {
         relationship = $("#relationship").val();
-        console.log(relationship);
+        update_relationship(chatID, userID, relationship);
     });
 });
 
@@ -421,6 +421,32 @@ async function send_message(message, chatID, user, alternateMessage) {
             'chatID': chatID,
             'userID': user,
             'alternateMessage': alternateMessage
+        })
+    });
+        
+    const data = await response.json();
+
+    // data.result is the server response
+    if (data.result) {
+        return data.result;
+    }
+}
+
+/**
+ * Function to update a relationship
+ * @param chatID The chat in which to update a relationship
+ * @param senderID
+ * @param {String} newRelationship 
+ */
+async function update_relationship(chatID, senderID, newRelationship) {
+    let response = await fetch('./update_relationship',
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'chatID': chatID,
+            'sender': senderID,
+            'relationship': newRelationship
         })
     });
         
