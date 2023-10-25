@@ -114,8 +114,8 @@ $(document).ready(function() {
         // Length Warning
         if (message.length > 200) {
             $('#output-container').removeClass("hidden");
-            $('#output').append("<i>Warning: A long message may not be properly read, " + 
-                "Consider organising a meetup. </i><br><br>");
+            $('#output').append("<i>A long message may not be properly read, " + 
+                "Consider organising a meetup.</i><br><br>");
         }
 
         let messagePoint = 0;
@@ -133,12 +133,14 @@ $(document).ready(function() {
                 if (search_string_with_dict(words, rude)) {
                     // Very rude word found in this sentence
                     $('#output-container').removeClass("hidden");
+                    $('#output-container').addClass("rude");
                     $('#output').append("Warning, this sentence may be rude: <b>" + sentencesEndings[i] + "</b><br>");
                     return;
                 } else if (search_string_with_dict(words, medium) && !search_string_with_dict(words, polite)) {
                     // Maybe somewhat rude sentence found, probably subject to false positives and negatives
                     // e.g. A command like 'Work on that' or 'no' without words like 'could', 'thank' or 'please'
                     $('#output-container').removeClass("hidden");
+                    $('#output-container').addClass("rude");
                     $('#output').append("Warning, this sentence may be slightly rude: <i>" + sentencesEndings[i] + "</i><br>");
                     return;
                 } else {
@@ -151,9 +153,16 @@ $(document).ready(function() {
     });
 
     $("#email").submit(function (event) {
-        if ($('#input').val().length > 0) {
+        const message = $('#input').val();
+        if (message.length > 0) {
             const chatBox = $(".chat-box:first-of-type");
-            send_message($('#input').val(), receiverID, userID);
+            if (!$('#output-container').hasClass("rude")) {
+                send_message(message, receiverID, userID, null);
+            } else {
+                send_to_server(message, relationship, receiverCulture).then(jsonMessage => {
+                    send_message(message, receiverID, userID, jsonMessage.content);
+                });
+            }
 
             const now = Date.now();
             if ((now - lastDate.getTime()) > 60000) {
@@ -389,7 +398,7 @@ async function get_messages(chatID) {
  * @param chatID 
  * @param user user ID
  */
-async function send_message(message, chatID, user) {
+async function send_message(message, chatID, user, alternateMessage) {
     let response = await fetch('./send_message', 
     {
         method: 'POST',
@@ -397,7 +406,8 @@ async function send_message(message, chatID, user) {
         body: JSON.stringify({
             'message': message,
             'chatID': chatID,
-            'userID': user
+            'userID': user,
+            'alternateMessage': alternateMessage
         })
     });
         

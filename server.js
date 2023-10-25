@@ -110,8 +110,9 @@ app.post('/send_message', async (req, res)=> {
     if (database == null) {
         return;
     }
-    messageData = {message: req.body.message, chatID: req.body.chatID, userID: req.body.userID};
-    // Messages have id, date, message, chatID, userID
+    messageData = {message: req.body.message, chatID: req.body.chatID, userID: req.body.userID, 
+        alternateMessage: req.body.alternateMessage};
+    // Messages have id, date, message, chatID, userID, alternateMessage
     database.query("INSERT INTO messages SET ?", messageData, function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
@@ -161,7 +162,7 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: ''
+    apiKey: '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'
 });
 
 app.post('/api', async (req, res)=> {
@@ -174,7 +175,7 @@ app.post('/api', async (req, res)=> {
         if (req.body.culture != null && req.body.relationship != null) {
             userData += req.body.culture + " " + req.body.relationship;
         } else if (req.body.culture != null) {
-            userData += req.body.culture + " person";
+            userData += req.body.culture + " colleague";
         } else if (req.body.relationship != null) {
             userData += req.body.relationship;
         } else {
@@ -182,13 +183,13 @@ app.post('/api', async (req, res)=> {
         }
 
         console.log("Keep original meaning and convert messages to concise, office appropriate " +
-        "language for a " + userData);
+        "language for my " + userData);
 
         const resp = await openai.chat.completions.create({
             model: "gpt-3.5-turbo",
             messages: [
                 {"role": "system", "content": "Keep original meaning and convert messages to concise, office appropriate " +
-                "language for a " + userData},
+                "language for my " + userData},
                 {"role": "user", "content": req.body.question}
             ],
         });
