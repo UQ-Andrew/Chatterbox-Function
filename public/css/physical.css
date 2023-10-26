@@ -21,6 +21,7 @@ body > #contact-list > .individual_contact {
 body > #contact-list > .individual_contact > img {
     height: 100%;
     width: 100%;
+    object-fit: cover;
 }
 
 body > section {

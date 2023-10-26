@@ -136,6 +136,12 @@ $(document).ready(function() {
     });
 
     $('#input').keyup(function (event) {
+        if(event.which === 13 && !event.shiftKey) {
+            event.preventDefault();
+        
+            $(this).closest("form").submit();
+            return;
+        }
         if (relationship == "Friend") {
             return;
         }
