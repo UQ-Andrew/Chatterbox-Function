@@ -5,9 +5,16 @@ $(document).ready(function() {
 
             $('#ai_input > p').html("<div class='loader'></div>");
             send_to_server($('#input').val(), relationship, receiverCulture).then(jsonMessage => {
-                $('#ai_input > button').prop("disabled", false);
-                $('#move_btn').prop("disabled", false);
-                $('#ai_input > p').html(jsonMessage.content);
+                if (jsonMessage.content) {
+                    $('#ai_input > p').html(jsonMessage.content);
+                    $('#ai_input > button').prop("disabled", false);
+                    $('#move_btn').prop("disabled", false);
+                } else {
+                    $('#ai_input > p').html("<span style='display:block;font-size:2em;color:red;text-align:center;'>&#10006;</span>");
+                    sleep(3000).then(() => {
+                        switch_to_single_input();
+                    });
+                }
             });
             $('#output-container').addClass("hidden");
         }
