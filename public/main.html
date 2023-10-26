@@ -5,19 +5,49 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/login.css">
         <meta name="viewport" content ="width=device-width, initial-scale 1.0">
     </head>
-    <body> 
-        <div>
-        <!-- <img class = 'back-image' src = 'images/back.png'> -->
+    <body>
+        <script src ="js/user-functions.js"></script>
+        <img class = 'back-image' src = 'images/back.png'>
 
             <div class = 'middle_module'>
-                <img class ="logo_image" src ='images/logo.png'>
-                <p class = 'welcome_title'>Hello, I am <b>ChatterBox</b> your online messaging help tool. To get started, fill in your details so I can get to know you a bit better.</p>
-                <br>
-                <a class = "back_button" href = 'info.html'>Back</a>
-                <a class = "next_button" href = 'info.html'>Next</a>
 
+                <div class = "middle_items">
+                    <img class ="logo_image" src ='images/logo.png'>
+                    <p class = 'welcome_title'>Hello I am <b>ChatterBox!</b> your online messaging help tool. To get started, fill in your details so I can get to know you a bit better.</p>
+                    <br>
+                    <div class = 'letsGo'>
+                        <a class = "start_button" href = 'info.html'>Let's Go</a>
+                        <img class = "iconArrowMain" src = "images/iconArrow.png">
+                    </div>
+                </div>
+                
+              
             </div>
-        </div>
+
+            <div class = "popup">
+                <img class ="popup_logo_image" src ='images/logo.png'>
+                    <p class = "popup_text"><span class ='popup_headding'>Welcome to ChatterBox!</span><br>
+                    Now, we want to be transparent here, so by using this website, you agree to our terms of service, of which outlines the sharing of some data to generative AI services.</p>
+                                <form class = "popup_form">
+                    <button class = 'popupButtonL' type="button"onclick="removePopup()">I Understand</button>
+                    <a href="disclaimer.html">
+                        <button class = 'popupButtonR' type="button" onclick="window.location.href = 'disclaimer.html'">Read Policy</button>
+                    </a>
+                </form>
+            </div>
+
+
+        <script>
+            document.getElementById("popupButtonL").addEventListener("click", removePopup);
+            function removePopup() {
+                var popups = document.getElementsByClassName("popup");
+                for (var i = 0; i < popups.length; i++) {
+                    popups[i].classList.add("popupgone");
+                    popups[i].classList.remove("popup");
+                }
+            }
+        </script>
     </body>

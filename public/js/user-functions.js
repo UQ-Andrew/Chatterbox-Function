@@ -1,4 +1,32 @@
 /**
+ * Function to get login/session data
+ */
+async function get_session() {
+    let response = await fetch('./session', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: '{}'
+    });
+        
+    const data = await response.json();
+
+    if (data) {
+        return data;
+    }
+}
+
+$(document).ready(function() {
+    $("body").addClass("js");
+
+    get_session().then(jsonSession => {
+        if (jsonSession.userid) {
+            window.location.href = './';
+        }
+    });
+});
+
+/**
  * Function to get user data for a name
  * @param {String} name name of the user to login for (Is unique)
  */

@@ -2,11 +2,13 @@
 const express =  require('express');
 const app = express();
 const session = require('express-session');
+var bodyParser = require('body-parser');
 app.use(session({
 	secret: 'secret',
 	resave: true,
 	saveUninitialized: true
 }));
+app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(express.json());
 
@@ -62,16 +64,16 @@ app.post('/login', async (req, res)=> {
         return;
     }
     // Users have id, name, picture, culture
-    database.query("SELECT * FROM users WHERE name = ?", [req.body.name], function (err, result, fields) {
+    database.query("SELECT * FROM users WHERE name = ? AND (password IS NULL OR password = ?)", [req.body.name, req.body.password], function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
         } else {
             if (result.length > 0) {
                 req.session.userid = result[0].id;
-                res.status(200).json({'result': result});
                 res.redirect('/');
             } else {
-                res.status(404).json({'result': result});
+                //res.status(404).json({'result': result});
+                res.redirect('/info.html');
             }
         }
     });
@@ -82,7 +84,7 @@ app.post('/signup', async (req, res)=> {
         return;
     }
     // Users have id, name, picture, culture
-    userData = {name: req.body.name, culture: req.body.culture};
+    userData = {name: req.body.name, culture: req.body.culture, picture: req.body.picture, email: req.body.email, password: req.body.password};
     database.query("INSERT INTO users SET ?", userData, function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
@@ -95,9 +97,9 @@ app.post('/signup', async (req, res)=> {
                     if (result.length > 0) {
                         req.session.userid = result[0].id;
                         res.redirect('/');
-                        res.status(200).json({'result': result});
                     } else {
                         res.status(404).json({'result': result});
+                        res.redirect('/info.html');
                     }
                 }
             });

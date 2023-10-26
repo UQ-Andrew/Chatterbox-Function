@@ -5,25 +5,53 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="css/login.css">
         <meta name="viewport" content ="width=device-width, initial-scale 1.0">
     </head>
 
     <body>
         <img class = 'back-image' src = 'images/back.png'>
+        <a href ="main.html">
         <img class ="tl_img" src ='images/logo.png'>
+        </a>
             <div class = 'middle_module_intro'>
-                <p class = 'details_head'>Input Your <br>Details</p>
-                <p class = 'details_sub_head'>Tell us about yourself, so we can get to know you better. </p>
-                    
-                <form>
-                    <br> 
-                    <input class = 'text_in' type="text" rows="1"name = "name" placeholder="    Name"><br>
-                    <input class = 'text_in' type="text" rows="1"name = "age" placeholder="     Age"><br>
-                    <input class = 'text_in' type="text" rows="1"name = "nationality" placeholder="     Nationality">
-                    <br>
-                    <br>
-                    <a href="index.html"><img class = "next_arrow" src = "images/iconArrow.png"></a>
-                </form>
+                <div class = 'left-module'>
+                        <p class = 'details_head'>Welcome Back!</p>
+                        <p class = 'details_sub_head'>Enter your personal details to login</p>
+                    <form action="login" method="POST">
+                        <fieldset>
+                            <br> 
+                            <input class='text_in' type="text" id="name" name="name" placeholder="Username">
+                            <input class='text_in' type="password" id="password" name="password" placeholder="Password">
+                            <br>
+                            <br>
+                            <button type="submit">
+                                <img class = "next_arrow" src = "images/iconArrowWhite.png">
+                            </button>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class =" right-module">
+                    <p class = 'details_head'>Get On<br>Board</p>
+                    <p class = 'details_sub_head'>Tell us about yourself, so we can get to know you better. </p>
+                        
+                    <form action="signup" method="post">
+                        <br> 
+                        <input class = 'text_in' type="text" rows="1"name = "name" placeholder="Username"><br>
+                        <input class = 'text_in' type="text" rows="1"name = "culture" placeholder="Culture (optional)">
+                        <input class = 'text_in' type="text" rows="1"name = "email" placeholder="Email (optional)">
+                        <input class = 'text_in' type="text" rows="1"name = "picture" placeholder="Profile Picture (Link) (optional)">
+                        <input class = 'text_in' type="text" rows="1"name = "password" placeholder="Password">
+                        <br>
+                        <br>
+                        <button type="submit">
+                            <img class = "next_arrow" src = "images/iconArrowWhite.png">
+                        </button>
+                    </form>
+                </div>
                 
             </div>
+
+        <script src="js/jquery-3.5.1.min.js"></script>
+        <script src ="js/user-functions.js"></script>
     </body>

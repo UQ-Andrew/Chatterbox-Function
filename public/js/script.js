@@ -70,8 +70,8 @@ $(document).ready(function() {
 
     get_session().then(jsonSession => {
         console.log(jsonSession);
-        if (jsonSession.userid) {
-            userID = jsonSession.userid;
+        if (jsonSession.id) {
+            userID = jsonSession.id;
         }
 
         if (jsonSession.receiverid) {
