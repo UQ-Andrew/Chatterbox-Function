@@ -25,9 +25,9 @@
 
     <!-- Tab labels -->
     <!-- <div id="tabs-bar"> -->
-        <!-- <div id="tab-items-container"> -->
+    <!-- <div id="tab-items-container"> -->
     <input type="radio" name="feature" value="message" id="messageRadio" checked>
-    <input type="radio" name="feature" value="friends" id="friendsRadio">
+    <input type="radio" name="feature" value="friends" id="friendsRadio" >
     <label class="radio-container" id="message_btn" for="messageRadio">
         <div class="tab-items" id="content1">
             <img src="images/messages_icon.png">
@@ -45,7 +45,7 @@
             <div>Friends</div>
         </div>
     </label>
-    <input type="radio" name="feature" value="setting" id="settingRadio">
+    <!-- <input type="radio" name="feature" value="setting" id="settingRadio"> -->
 
     <label class="radio-container" id="setting_btn" for="settingRadio">
         <div class="tab-items" id="content3">
@@ -53,8 +53,6 @@
             <div>Settings</div>
         </div>
     </label>
-    <!-- </div> -->
-    <!-- </div> -->
 
 
 
@@ -71,17 +69,17 @@
         <div class="chat-interface">
 
             <div class="message_tab_title section messages">&nbsp &nbsp Messages</div>
-            <div class="message_tab_title section friends">&nbsp &nbsp Friends</div>
+            <div class="friend-tab-title section friends">&nbsp &nbsp Friends</div>
 
             <div id="tab-content-container"> 
-                <section class="friends-content friends-class section friends">
-                    <div class="team-title-flex section friends">
-                 
-                        <div>Your Team</div>
-                        <div>Team A</div>
-                        <div>Your Team</div>
-                    </div>
-                    <div class="friends-container section friends">
+                <div class="team-title-flex section friends">
+                    <div id="your-team"><p>Your Team</p></div>
+                    <div id="team-a"><p>Team A</p></div>
+                    <div id="team-b"><p>Team B</p></div>
+                </div>
+                <section class="friends-content section friends">
+
+                    <div class="friends-container">
                         <div class="friend_name"> 
                             <img src="images/inverse_profile.png" >
                             <p>Kira Smith</p>
@@ -113,7 +111,23 @@
                         <div class="friend_name"> 
                             <img src="images/inverse_profile.png" >
                             <p>Name</p>
-                        </div>
+                    </div>
+                </section>
+
+                <section id="individual-profile" class="friends-profile">
+                  <div id="profile-name-img-flex">
+                    <img id="profile-img" src="images/inverse_profile.png" >
+                    <p id="profile-name">Kira Smith</p>
+                  </div>
+                 
+                    <div id="bio"><p>Bio <br><br>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                        Sed tempor est at turpis venenatis finibus. In feugiat vehicula 
+                        tellus, vitae aliquet est volutpat non. Mauris gravida elementum 
+                        risus, et imperdiet diam fermentum vel.</p> </div>
+                    <div id="role"><p>Role</p></div>
+                    <div id="interests"><p>Interests</p></div>
+                    <div id="interesting-question"><p>Interesting Question</p></div>
                 </section>
             
 
@@ -162,7 +176,7 @@
                     </div>
                 </section>
                 
-                <div  class="section messages chat-room-contact chat-room-content">
+                <div class="section messages chat-room-contact chat-room-content">
                     <input class='chat-search-bar' type="text" placeholder="Search..">
 
                     <div class="all_contacts" id="contact-list">
@@ -195,15 +209,13 @@
             
         </div>
         <!-- The Friends Tab -->
-        <div></div>
-        <!-- The Settings Tab -->
     </div>
 
 
     </div>
 
 
- 
+
     <div class="animation">
         <ul class="lines">
                 <li></li>
@@ -219,8 +231,9 @@
         </ul>
     </div>
 
-		<script src="js/jquery-3.5.1.min.js"></script>
-		<script src="js/script.js"></script>
-        <script src="js/ai.js"></script>
+    <script src="js/switch-tab.js"></script>
+    <script src="js/jquery-3.5.1.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/ai.js"></script>
 </body>
 </html>

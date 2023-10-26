@@ -129,8 +129,6 @@ input[type="radio"] {
     overflow: hidden;
     width: 90%;
     border-radius: 50%;
-    object-fit: cover;
-    max-height: 5em;
 }
 #user_name{
     font-size: large;
@@ -157,9 +155,9 @@ input[type="radio"] {
 
 .chat-room-contact{
     grid-row-start: row-2;
-    grid-row-end: row-3;
-    grid-column-start: col-1;
-    grid-column-end: col-1;
+    grid-row-end: row-4;
+    grid-column-start: col-2;
+    grid-column-end: col-3;
     display: grid;
     grid-template-columns: [col-1] 5% [col-2] 90% [col-3] 5%;
     grid-template-rows: [row-1] 4em [row-2] 100%;
@@ -231,6 +229,7 @@ input[type="radio"] {
     gap: 10px;
     margin: 5%;
     font-weight: bold;
+    overflow:hidden ;
 }
 #message_num{
     margin-left: 5%;
@@ -255,37 +254,31 @@ input[type="radio"] {
     grid-column-end: five;
     width: 100%;
     display: grid;
-    grid-template-columns: [col-1] 15% [col-2] 82% [col-3] 3%;
-    grid-template-rows: [row-1] 5% [row-2] 90% [row-3] 5%;
+    grid-template-columns: [col-1] 1% [col-2] 15% [col-3] 83% [col-4] 1%;
+    grid-template-rows: [row-1] 5% [row-2] 10% [row-3] 80% [row-4] 5% ;
     border-radius: 10px;
     overflow: hidden;
+}
+
+.team-title-flex{
+    display: flex;
+    justify-content:space-evenly;
+    align-items: center;
+    grid-row-start: row-2;
+    grid-row-end: row-3;
+    grid-column-start: col-2;
+    grid-column-end: col-4;
 }
 
 .friends-content{
     display: grid;
     grid-template-rows: [row-1] 5% [row-2] 10% [row-3] 35% [row-4] 35% [row-5] 10% [row-6] 5%;
     grid-template-columns: [col-1] 2% [col-2] 48% [col-3] 48% [col-4] 2% ;
-    width: 100%;
-    overflow: hidden;
-    grid-row-start: row-1;
+    grid-row-start: row-3;
     grid-row-end: row-4;
-    grid-column-start: col-1;
-    grid-column-end: col-4;
-}
-
-.team-title-flex{
-    display: flex;
-    justify-content:space-around;
-    align-items: center;
-    grid-row-start: row-2;
-    grid-row-end: row-2;
     grid-column-start: col-2;
     grid-column-end: col-4;
-    height: 100%;
-    background-color: #b8b8b8;
-
 }
-
 
 .friends-container{
     border-radius: 0px 0px 10px 10px;
@@ -293,11 +286,10 @@ input[type="radio"] {
     flex-wrap: wrap;
     gap: 10px; /* Adjust this value as needed */
     width: 100%;
-    grid-column-start: col-2;
-    grid-column-end: col-4;
-    grid-row-start: row-3;
+    grid-column-start: col-1;
+    grid-column-end: col-5;
+    grid-row-start: row-1;
     grid-row-end: row-6;
-    width: 100%;
     justify-content: space-around;
     overflow: hidden;
     text-align: center;
@@ -378,10 +370,10 @@ input[type="radio"] {
     height: 100%;
     width: 100%;
     overflow: hidden;
-    grid-column-start: col-2;
-    grid-column-end: col-3;
+    grid-column-start: col-3;
+    grid-column-end: col-4;
     grid-row-start: row-2;
-    grid-row-end: row-2;
+    grid-row-end: row-4;
 }
 
 /* chat-interface -> chat-room -> chat-box */
@@ -401,12 +393,16 @@ input[type="radio"] {
 }
 
 .section{
-    visibility: hidden;
+    visibility: hidden !important;
 }
 
 /* Show the section(s) when the "cat" radio button is checked */
 #messageRadio:checked ~ #function-container .chat-interface .messages {
     visibility: visible !important;
+}
+
+#messageRadio:checked ~ #function-container .chat-interface #individual-profile  {
+    visibility: hidden !important;
 }
 #messageRadio:checked ~ #message_btn #content1 {
     background-color: rgba(254, 81, 1, 0.56) !important;
@@ -414,9 +410,6 @@ input[type="radio"] {
     opacity: 90%;
     height: 50px;
     box-shadow: 1px 1px 1px gray;  
-
-    
-
 }
 
 #friendsRadio:checked ~ #friends_btn #content2 {
@@ -425,8 +418,6 @@ input[type="radio"] {
     opacity: 90%;
     height: 50px;
     box-shadow: 1px 1px 1px gray;  
-
-
 }
 
 .current-contact {
@@ -447,18 +438,126 @@ input[type="radio"] {
     grid-column-start: col-2;
 }
 
-/* #messageRadio:checked ~ #function-container .chat-interface .message_tab_title {
+.friends-profile{
+    padding-top: 50px;
+
+    background-color: #494949;
+    grid-row-start: row-3;
+    grid-row-end: row-4;
+    grid-column-start: col-2;
+    grid-column-end: col-4;
+    display: grid;
+    grid-template-columns: [col-1] 5% [col-2] 10% [col-3] 10% [col-4] 20% [col-5] 5% 
+    [col-6] 10% [col-7] 10% [col-8] 20% [col-9] 10%;
+    grid-template-rows: [row-1] 5% [row-2] 20% [row-3] 5% [row-4] 20% [row-5] 5% 
+    [row-6] 20% [row-7] 5% [row-8] 10% [row-9];
+}
+
+
+#profile-name-img-flex{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    grid-row-start: row-2;
+    grid-row-end: row-5;
+    grid-column-start: col-2;
+    grid-column-end: col-5;
+    color: white;
+}
+
+  
+  
+#your-team{
+    border-bottom: 10px solid #71CCFF;    
+    padding-bottom: 1em; /* Adjusts the height of the color effect */
+    background-color: #D9D9D9;
+}
+
+#team-a, #team-b{
+    border-bottom: 10px solid #B8B8B8;    
+    padding-bottom: 1em; /* Adjusts the height of the color effect */
+    background-color: #B8B8B8;
+}
+#team-a, #team-b, #your-team{
+    width: 34%;
+    height: 50%;
+    text-align: center;
+    /* display: flex;
+    justify-content: center;
+    align-items:flex-end; */
+}
+#individual-profile{
+    visibility: hidden;
+}
+#team-a p, #team-b p, #your-team p{
+    padding-top: 3px;
+}
+
+  
+#bio{
+    grid-row-start: row-5;
+    grid-row-end: row-9;
+    grid-column-start: col-2;
+    grid-column-end: col-5;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+}
+#bio p, #role p, #interests p, #interesting-question p {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+#role{
+    grid-row-start: row-2;
+    grid-row-end: row-3;
+    grid-column-start: col-6;
+    grid-column-end: col-9;
+    background-color: #fff;
+    height: 100%;
+    border-radius: 10px;
+    width: 100%;
+}
+
+#interests{
+    grid-row-start: row-4;
+    grid-row-end: row-5;
+    grid-column-start: col-6;
+    grid-column-end: col-9;
+    background-color: #fff;
+    height: 100%;
+    border-radius: 10px;
+    width: 100%;
+}
+
+#interesting-question{
+    grid-row-start: row-6;
+    grid-row-end: row-9;
+    grid-column-start: col-6;
+    grid-column-end: col-9;
+    background-color: #fff;
+    height: 100%;
+    border-radius: 10px;
+    width: 100%;
+}
+
+#messageRadio:checked ~ #function-container .chat-interface .message_tab_title {
     visibility: visible;
-} */
+}
+
+#friendsRadio:checked ~ #function-container .chat-interface .friend-tab-title {
+    visibility: visible !important;
+}
 
 /* Show the section when the "bird" radio button is checked */
 #friendsRadio:checked ~ #function-container #tab-content-container .friends {
-    visibility: visible;
+    visibility: visible !important;
 }
 
-#friendsRadio:checked ~ #function-container .chat-interface .friends {
-    visibility: visible;
-}
+
+
 
 ::-webkit-scrollbar {
     width: 10px;
