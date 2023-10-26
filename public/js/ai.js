@@ -96,3 +96,29 @@ async function send_to_server(inputText, relationship, culture) {
         return data.message;
     }
 }
+
+/**
+ * Function to send data to OPENAI server for its moderation check
+ * @param {String} inputText What to send to the server
+ */
+async function moderationCheck(inputText) {
+    if (inputText.trim().length === 0) {
+        return
+    }
+    let response = await fetch('./moderation', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'question': inputText
+        })
+    });
+    
+    console.log(response);
+    const data = await response.json()
+
+    // data.message is the actual message sent back from the server, in this case chatGPT response
+    if (data.message) {
+        return data.message;
+    }
+}

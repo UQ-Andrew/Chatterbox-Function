@@ -230,7 +230,12 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: ''
+    apiKey: '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'
+});
+
+app.post('/moderation', async (req, res)=> {
+    const moderationCheck = await openai.moderations.create({ input: req.body.question });
+    res.status(200).json({message: moderationCheck.results[0]});
 });
 
 app.post('/api', async (req, res)=> {

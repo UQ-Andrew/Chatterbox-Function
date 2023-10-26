@@ -6,6 +6,9 @@ let receiverCulture = null; // Edited with info from get_chat()
 let relationship = null; // Edited with info from get_chat()
 let lastDate = new Date(0);
 
+const typeCounterTime = 30;
+let typeCounter = 0;
+
 const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
     "b": ["bastard", "bitch", "bloody", "bullshit"],
     "c": ["cock", "crap", "cunt"],
@@ -90,6 +93,7 @@ $(document).ready(function() {
                     </div>`);
                 } else {
                     $("#user_name").html(user.name);
+                    $("#user_email").html((user.email != null) ? user.email : "");
                     $("#user_profile").attr("src",(user.picture != null) ? user.picture : "images/icon _profile circle_.png");
                 }
             }
@@ -145,7 +149,8 @@ $(document).ready(function() {
         if (relationship == "Friend") {
             return;
         }
-        rude_check();
+        typeCounter = typeCounterTime;
+        typing_slower()
     });
 
     $("#email").submit(function (event) {
@@ -153,8 +158,21 @@ $(document).ready(function() {
         if (message.length > 0) {
             const chatBox = $(".chat-box:first-of-type");
             if (!$('#output-container').hasClass("rude")) {
-                send_message(message, receiverID, userID, null);
+                moderationCheck(message).then(jsonMessage => {
+                    if (jsonMessage.flagged == true) {
+                        $('#output-container').removeClass("hidden");
+                        $('#output-container').addClass("rude");
+                        $('#output-container').html("<p id='output'></p>");
+                        $('#output').append("Warning, <b>This was flagged by automatic moderation, do you truly wish to send this?</b><br>");
+                        chatBox.children("div").last().remove();
+                        return;
+                    } else {
+                        send_message(message, receiverID, userID, null);
+                        $('#input').val("");
+                    }
+                });
             } else {
+                $('#input').val("");
                 send_to_server(message, relationship, receiverCulture).then(jsonMessage => {
                     send_message(message, receiverID, userID, jsonMessage.content);
                 });
@@ -170,8 +188,6 @@ $(document).ready(function() {
             chatBox.append(`<div><div class="personal">
                 <p>${$('#input').val()}</p>
                 </div></div>`);
-            
-            $('#input').val("");
 
             $('#output-container').addClass("hidden");
             $('#output-container').html("<p id='output'></p>");
@@ -261,6 +277,21 @@ async function poll_chat_database() {
     });
 }
 
+function typing_slower() {
+    if (typeCounter > 0) {
+        typeCounter -= 1;
+        sleep(10).then(() => {
+            if (typeCounter == typeCounterTime) {
+                return;
+            } else {
+                typing_slower();
+            }
+        });
+    } else {
+        rude_check()
+    }
+}
+
 function rude_check() {
     const message = $('#input').val();
 
@@ -275,15 +306,13 @@ function rude_check() {
         $('#output-container').removeClass("hidden");
         $('#output').append("<i>A long message may not be properly read, " + 
             "Consider organising a meetup.</i><br><br>");
+    } else {
+        
     }
 
     let messagePoint = 0;
 
     for (let i = 0; i < sentencesEndings.length; i++) {
-
-        /* Old thing for debugging
-        console.log("messagePoint: %d, sentence length: %d, sentence: %s", 
-            messagePoint, sentencesEndings[i].length, sentencesEndings[i]);*/
 
         if ((sentencesEndings % 2) != 0) {
             // Sentence
