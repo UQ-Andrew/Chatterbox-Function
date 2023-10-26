@@ -1,9 +1,9 @@
 
-const userID = 7; // Replace in the future with something (maybe php) for logins
+let userID = 7; // Replace in the future with something (maybe php) for logins
 let receiverID = 1;
-let chatID = 1; // Change for whatever chat is loaded, know which chat to load through get_chat()
-let receiverCulture = "Australian"; // Editted with info from get_chat()
-let relationship = "Boss"; // Editted with info from get_chat()
+let chatID = 1; // Edited with info from get_chat()
+let receiverCulture = null; // Edited with info from get_chat()
+let relationship = null; // Edited with info from get_chat()
 let lastDate = new Date(0);
 
 const rude = {"a": ["apeshit", "arse", "arsehole", "ass", "asshat", "asshole"],
@@ -47,62 +47,91 @@ const polite = {"a": ["appreciate"],
     "t": ["thank", "thanks", "thankyou"],
     "w": ["welcome", "would"]};
 
+/**
+ * Function to get login/session data
+ */
+async function get_session() {
+    let response = await fetch('./session', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: '{}'
+    });
+        
+    const data = await response.json();
+
+    if (data) {
+        return data;
+    }
+}
+
 $(document).ready(function() {
     $("body").addClass("js");
 
-    // Setting up users
-    get_users().then(jsonUsers => {
-        const contacts = $("#contact-list:first-of-type");
-        contacts.html("");
-        for (let user of jsonUsers) {
-            if (user.id != userID) {
-                contacts.append(`<div class="individual_contact" id="${user.id}">
-                ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/inverse_profile.png" alt="Profile picture">'}
-                <p>${user.name}</p>
-                </div>`);
-            } else {
-                $("#user_name").html(user.name);
-                $("#user_profile").attr("src",(user.picture != null) ? user.picture : "images/icon _profile circle_.png");
-            }
+    get_session().then(jsonSession => {
+        console.log(jsonSession);
+        if (jsonSession.userid) {
+            userID = jsonSession.userid;
         }
-        $(".individual_contact").on("click", function(event) {
-            lastDate = new Date(0);
-            receiverID = $(this).attr('id');
-            get_chat(userID, receiverID).then(jsonInfo => {
-                chatID = jsonInfo.chatID;
-                receiverCulture = jsonInfo.culture;
-                if (jsonInfo.user2 == userID) {
-                    relationship = jsonInfo.user2to1Relationship;
+
+        if (jsonSession.receiverid) {
+            receiverID = jsonSession.receiverid;
+        }
+
+        // Setting up users
+        get_users().then(jsonUsers => {
+            const contacts = $("#contact-list:first-of-type");
+            contacts.html("");
+            for (let user of jsonUsers) {
+                if (user.id != userID) {
+                    contacts.append(`<div class="individual_contact" id="${user.id}">
+                    ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/inverse_profile.png" alt="Profile picture">'}
+                    <p>${user.name}</p>
+                    </div>`);
                 } else {
-                    relationship = jsonInfo.user1to2Relationship;
+                    $("#user_name").html(user.name);
+                    $("#user_profile").attr("src",(user.picture != null) ? user.picture : "images/icon _profile circle_.png");
                 }
-                $("#relationship").val(relationship);
-        
-                get_messages(chatID).then(jsonMessages => {
-                    write_messages_to_chatbox(jsonMessages);
-                    
-                    $(".chat-box:first-of-type")[0].scrollTop = $(".chat-box:first-of-type")[0].scrollHeight;
+            }
+            $(".individual_contact").on("click", function(event) {
+                lastDate = new Date(0);
+                receiverID = $(this).attr('id');
+                get_chat(userID, receiverID).then(jsonInfo => {
+                    chatID = jsonInfo.chatID;
+                    receiverCulture = jsonInfo.culture;
+                    if (jsonInfo.user2 == userID) {
+                        relationship = jsonInfo.user2to1Relationship;
+                    } else {
+                        relationship = jsonInfo.user1to2Relationship;
+                    }
+                    $("#relationship").val(relationship);
+            
+                    get_messages(chatID).then(jsonMessages => {
+                        write_messages_to_chatbox(jsonMessages);
+                        
+                        $(".chat-box:first-of-type")[0].scrollTop = $(".chat-box:first-of-type")[0].scrollHeight;
+                    });
                 });
             });
         });
-    });
 
-    // Getting chat messages
-    get_chat(userID, receiverID).then(jsonInfo => {
-        chatID = jsonInfo.chatID;
-        receiverCulture = jsonInfo.culture;
-        if (jsonInfo.user2 == userID) {
-            relationship = jsonInfo.user2to1Relationship;
-        } else {
-            relationship = jsonInfo.user1to2Relationship;
-        }
-        $("#relationship").val(relationship);
+        // Getting chat messages
+        get_chat(userID, receiverID).then(jsonInfo => {
+            chatID = jsonInfo.chatID;
+            receiverCulture = jsonInfo.culture;
+            if (jsonInfo.user2 == userID) {
+                relationship = jsonInfo.user2to1Relationship;
+            } else {
+                relationship = jsonInfo.user1to2Relationship;
+            }
+            $("#relationship").val(relationship);
 
-        get_messages(chatID).then(jsonMessages => {
-            write_messages_to_chatbox(jsonMessages);
-            
-            $(".chat-box:first-of-type")[0].scrollTop = $(".chat-box:first-of-type")[0].scrollHeight;
-            poll_chat_database()
+            get_messages(chatID).then(jsonMessages => {
+                write_messages_to_chatbox(jsonMessages);
+                
+                $(".chat-box:first-of-type")[0].scrollTop = $(".chat-box:first-of-type")[0].scrollHeight;
+                poll_chat_database()
+            });
         });
     });
 

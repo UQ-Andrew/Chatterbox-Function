@@ -1,5 +1,24 @@
 let moving = false;
 
+/**
+ * Function to get login/session data
+ */
+async function set_receiver(receiverID) {
+    let response = await fetch('./set_receiver', 
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'receiverID': receiverID
+        })
+    });
+        
+    const data = await response;
+
+    if (data) {
+        return data;
+    }
+}
 
 $(document).ready(function() {
     $("body").addClass("js");
@@ -15,6 +34,12 @@ $(document).ready(function() {
             ${(user.picture != null) ? '<img src="' + user.picture + '" alt="Profile picture">' : '<img src="images/inverse_profile.png" alt="Profile picture">'}
             </div>`);
         }
+
+        $(".individual_contact").on("click", function(event) {
+            const receiverID = $(this).attr('id');
+            set_receiver(receiverID);
+            window.location.href = './';
+        });
 
         $("body > section").click(function (event) {
             moving = true;

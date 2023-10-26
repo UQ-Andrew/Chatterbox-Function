@@ -1,6 +1,13 @@
 // express server setup
 const express =  require('express');
 const app = express();
+const session = require('express-session');
+app.use(session({
+	secret: 'secret',
+	resave: true,
+	saveUninitialized: true
+}));
+
 app.use(express.json());
 
 // Going to localhost:5000 will open public/index.html
@@ -34,6 +41,23 @@ database.connect(function(err) {
     }
 });
 
+app.post('/session', async (req, res)=> {
+    let response = {};
+    if (req.session.userid) {
+        response.id = req.session.userid;
+    }
+    if (req.session.receiverid) {
+        response.receiverid = req.session.receiverid;
+    }
+    res.status(200).json(response);
+});
+
+app.post('/set_receiver', async (req, res)=> {
+    req.session.receiverid = req.body.receiverID;
+    console.log(req.session);
+    res.redirect('/');
+});
+
 app.post('/login', async (req, res)=> {
     if (database == null) {
         return;
@@ -43,9 +67,15 @@ app.post('/login', async (req, res)=> {
         if (err) {
             res.status(400).json({message: err.message});
         } else {
-            res.status(200).json({'result': result});
+            if (result.length > 0) {
+                req.session.userid = result[0].id;
+                res.status(200).json({'result': result});
+                res.redirect('/');
+            } else {
+                res.status(404).json({'result': result});
+            }
         }
-      });
+    });
 });
 
 app.post('/signup', async (req, res)=> {
@@ -58,7 +88,20 @@ app.post('/signup', async (req, res)=> {
         if (err) {
             res.status(400).json({message: err.message});
         } else {
-            res.status(200).json({'result': result});
+            // Should check to see if a user was actually inserted
+            database.query("SELECT * FROM users WHERE name = ?", [req.body.name], function (err, result, fields) {
+                if (err) {
+                    res.status(400).json({message: err.message});
+                } else {
+                    if (result.length > 0) {
+                        req.session.userid = result[0].id;
+                        res.redirect('/');
+                        res.status(200).json({'result': result});
+                    } else {
+                        res.status(404).json({'result': result});
+                    }
+                }
+            });
         }
       });
 });
