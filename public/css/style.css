@@ -194,7 +194,7 @@ input[type="radio"] {
 }
 
 
-.message_tab_title{
+.message_tab_title, .friend-tab-title{
     width: 100%;
     border-radius: 5px;
     grid-column-start: line2;

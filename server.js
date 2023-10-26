@@ -54,7 +54,6 @@ app.post('/session', async (req, res)=> {
 
 app.post('/set_receiver', async (req, res)=> {
     req.session.receiverid = req.body.receiverID;
-    console.log(req.session);
     res.redirect('/');
 });
 
