@@ -21,7 +21,7 @@ body > #contact-list > .individual_contact {
 body > #contact-list > .individual_contact > img {
     height: 100%;
     width: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 body > section {
@@ -33,8 +33,9 @@ body > section {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 33%;
+    min-width: 12em;
     height: 33%;
+    min-height: 12em;
     margin: 0.5em;
     overflow-y: hidden;
     overflow-x: hidden;

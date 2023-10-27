@@ -942,7 +942,7 @@ input[type="radio"] {
 
 .middle_module_intro{
     border-radius: 15px;
-    background: rgba(0, 0, 0, 0.93);
+
     width: 35%;
     height: 75%;
     position: absolute;
@@ -961,7 +961,7 @@ form{
     background-color:rgba(254, 81, 1, 0.57) ;
     height: 55px;
     width: 80%;
-    border-radius: 15px;
+
 }
 .next_arrow{
     margin-left: 70%;

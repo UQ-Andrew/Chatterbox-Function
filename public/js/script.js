@@ -146,6 +146,7 @@ $(document).ready(function() {
             $(this).closest("form").submit();
             return;
         }
+        $('#output-container').removeClass("rude");
         if (relationship == "Friend") {
             return;
         }
@@ -174,24 +175,31 @@ $(document).ready(function() {
         if (message.length > 0) {
             const chatBox = $(".chat-box:first-of-type");
             if (!$('#output-container').hasClass("rude")) {
-                moderationCheck(message).then(jsonMessage => {
-                    if (jsonMessage.flagged == true) {
-                        $('#output-container').removeClass("hidden");
-                        $('#output-container').addClass("rude");
-                        $('#output-container').html("<p id='output'></p>");
-                        $('#output').append("Warning, <b>This was flagged by automatic moderation, do you truly wish to send this?</b><br>");
-                        chatBox.children("div").last().remove();
-                        return;
-                    } else {
-                        send_message(message, receiverID, userID, null);
-                        $('#input').val("");
-                    }
-                });
+                    moderationCheck(message).then(jsonMessage => {
+                        try {
+                            if (jsonMessage.flagged == true) {
+                                $('#output-container').removeClass("hidden");
+                                $('#output-container').addClass("rude");
+                                $('#output-container').html("<p id='output'></p>");
+                                $('#output').append("Warning, <b>This was flagged by automatic moderation, do you truly wish to send this?</b><br>");
+                                chatBox.children("div").last().remove();
+                                return;
+                            } else {
+                                $('#output-container').removeClass("rude");
+                                send_message($('#input').val(), chatID, userID, null);
+                                $('#input').val("");
+                            }
+                        } catch (error) {
+                            $('#output-container').removeClass("rude");
+                            send_message($('#input').val(), chatID, userID, null);
+                            $('#input').val("");
+                        }
+                    });
             } else {
-                $('#input').val("");
                 send_to_server(message, relationship, receiverCulture).then(jsonMessage => {
-                    send_message(message, receiverID, userID, jsonMessage.content);
+                    send_message($('#input').val(), chatID, userID, jsonMessage.content);
                 });
+                $('#input').val("");
             }
 
             const now = Date.now();
@@ -277,7 +285,12 @@ function sleep(ms) {
 async function poll_chat_database() {
     sleep(8000).then(() => {
         get_messages(chatID).then(jsonMessages => {
-            if (jsonMessages[jsonMessages.length - 1].message != 
+            if (jsonMessages.length == 0) {
+                poll_chat_database();
+                return;
+            }
+
+            if ($(".chat-box:first-of-type > div").length == 0 || jsonMessages[jsonMessages.length - 1].message != 
                 $(".chat-box:first-of-type > div:last-of-type > div > p:last-of-type").html()) {
                 let scrolled = false;
 

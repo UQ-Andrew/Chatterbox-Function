@@ -43,8 +43,8 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 .middle_module_disclaimer{
     border-radius: 8px;
     background: #3d4a55b6;
-    width: 30%;
-    height: 60%;
+    width: 50%;
+    height: 70%;
     text-align: center;
     position: absolute;
     transform: translate(-50%, -50%);

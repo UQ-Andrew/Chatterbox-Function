@@ -2,7 +2,7 @@ $(document).ready(function() {
     $("#ai_check").click(function (event) {
         if ($('#input').val().length > 0) {
             switch_to_double_input();
-
+            $('#output-container').removeClass("rude");
             $('#ai_input > p').html("<div class='loader'></div>");
             send_to_server($('#input').val(), relationship, receiverCulture).then(jsonMessage => {
                 if (jsonMessage.content) {
@@ -22,12 +22,14 @@ $(document).ready(function() {
     });
 
     $("#move_btn").click(function (event) {
+        $('#output-container').removeClass("rude");
         switch_to_single_input();
         $('#input').val($('#ai_input > p').html());
     });
 
     $("#ai_input > button").click(function (event) {
         const message = $('#ai_input > p').html();
+        $('#output-container').removeClass("rude");
         const chatBox = $(".chat-box:first-of-type");
         send_message(message, receiverID, userID, null);
 
@@ -114,7 +116,6 @@ async function moderationCheck(inputText) {
         })
     });
     
-    console.log(response);
     const data = await response.json()
 
     // data.message is the actual message sent back from the server, in this case chatGPT response
