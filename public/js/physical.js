@@ -51,10 +51,10 @@ $(document).ready(function() {
             for (let user of contacts) {
                 $(user).css({
                     left: function( index, value ) {
-                        return offset.left + width / 2 + Math.random() * 200 - 100;
+                        return offset.left + width / 2 + (Math.random() * 50 - 25) * contacts.length;
                     },
                     top: function( index, value ) {
-                      return offset.top + height / 2 + Math.random() * 200 - 100;
+                      return offset.top + height / 2 + (Math.random() * 50 - 25) * contacts.length;
                     }
                   });
             }

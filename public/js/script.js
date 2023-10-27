@@ -72,7 +72,6 @@ $(document).ready(function() {
     $("body").addClass("js");
 
     get_session().then(jsonSession => {
-        console.log(jsonSession);
         if (jsonSession.id) {
             userID = jsonSession.id;
         }
@@ -95,6 +94,7 @@ $(document).ready(function() {
                     $("#user_name").html(user.name);
                     $("#user_email").html((user.email != null) ? user.email : "");
                     $("#user_profile").attr("src",(user.picture != null) ? user.picture : "images/icon _profile circle_.png");
+                    $("#team").val(user.team);
                 }
             }
             $(".individual_contact").on("click", function(event) {
@@ -153,6 +153,22 @@ $(document).ready(function() {
         typing_slower()
     });
 
+    $('#search').keyup(function (event) {
+        const search = $(this).val();
+        const contacts = $("#contact-list > .individual_contact");
+        if (search.length == 0) {
+            contacts.removeClass("hidden");
+            return;
+        }
+        const regex = new RegExp(`(${search})`, "gi");
+        for (let contact of contacts) {
+            $(contact).addClass("hidden");
+            if ($(contact).children("p").eq(0).html().match(regex)) {
+                $(contact).removeClass("hidden");
+            }
+        }
+    });
+
     $("#email").submit(function (event) {
         const message = $('#input').val();
         if (message.length > 0) {
@@ -201,6 +217,10 @@ $(document).ready(function() {
     $("#relationship").on("change", function (event) {
         relationship = $("#relationship").val();
         update_relationship(chatID, userID, relationship);
+    });
+    $("#team").on("change", function (event) {
+        //team = $("#team").val();
+        update_team(userID, $(this).val());
     });
 });
 
@@ -514,6 +534,30 @@ async function update_relationship(chatID, senderID, newRelationship) {
             'chatID': chatID,
             'sender': senderID,
             'relationship': newRelationship
+        })
+    });
+        
+    const data = await response.json();
+
+    // data.result is the server response
+    if (data.result) {
+        return data.result;
+    }
+}
+
+/**
+ * Function to update which team the user is in
+ * @param userID The user to update
+ * @param {String} team The team to be placed in
+ */
+async function update_team(userID, team) {
+    let response = await fetch('./update_team',
+    {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            'userID': userID,
+            'team': team
         })
     });
         

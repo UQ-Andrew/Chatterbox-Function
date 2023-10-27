@@ -63,7 +63,7 @@ app.post('/login', async (req, res)=> {
     if (database == null) {
         return;
     }
-    // Users have id, name, picture, culture
+    // Users have id, name, picture, culture, team, email, password
     database.query("SELECT * FROM users WHERE name = ? AND (password IS NULL OR password = ?)", [req.body.name, req.body.password], function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
@@ -83,7 +83,7 @@ app.post('/signup', async (req, res)=> {
     if (database == null) {
         return;
     }
-    // Users have id, name, picture, culture
+    // Users have id, name, picture, culture, team, email, password
     userData = {name: req.body.name, culture: req.body.culture, picture: req.body.picture, email: req.body.email, password: req.body.password};
     database.query("INSERT INTO users SET ?", userData, function (err, result, fields) {
         if (err) {
@@ -111,7 +111,7 @@ app.post('/update_user', async (req, res)=> {
     if (database == null) {
         return;
     }
-    // Users have id, name, picture, culture
+    // Users have id, name, picture, culture, team, email, password
     userData = {name: req.body.name, culture: req.body.culture, picture: req.body.picture};
     database.query("UPDATE users SET ? WHERE id = ?", [userData, req.body.id], function (err, result, fields) {
         if (err) {
@@ -126,7 +126,7 @@ app.post('/get_users', async (req, res)=> {
     if (database == null) {
         return;
     }
-    // Users have id, name, picture, culture
+    // Users have id, name, picture, culture, team, email, password
     database.query(`SELECT * FROM users`, function (err, result, fields) {
         if (err) {
             res.status(400).json({message: err.message});
@@ -190,12 +190,26 @@ app.post('/update_relationship', async (req, res)=> {
     });
 });
 
+app.post('/update_team', async (req, res)=> {
+    if (database == null) {
+        return;
+    }
+    // Users have id, name, picture, culture, team, email, password
+    database.query("UPDATE users SET ? WHERE id = ?", [{team: req.body.team}, req.body.userID], function (err, result, fields) {
+        if (err) {
+            res.status(400).json({message: err.message});
+        } else {
+            res.status(200).json({'result': result});
+        }
+    });
+});
+
 app.post('/get_chat', async (req, res)=> {
     if (database == null) {
         return;
     }
     // Chats have id, user1, user2, user1to2Relationship, user2to1Relationship
-    // Users have id, name, picture, culture
+    // Users have id, name, picture, culture, team, email, password
     // Specifically checking user2 from users for user2 culture!
     database.query(`SELECT chats.\`id\` AS chatID, \`user1\`, \`user2\`, \`user2to1Relationship\`,
         \`user1to2Relationship\`, users.\`culture\` FROM chats, users
@@ -230,7 +244,7 @@ const OpenAI = require("openai");
 
 const openai = new OpenAI({
     // PRIVATE API KEY GOES HERE
-    apiKey: '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'
+    apiKey: ''
 });
 
 app.post('/moderation', async (req, res)=> {

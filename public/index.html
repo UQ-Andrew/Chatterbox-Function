@@ -17,6 +17,7 @@
             <div id="user_infor" >
                 <p id="user_name" >James Joyce</p>
                 <p id="user_email">james.j@company.com</p>
+                <a href="info.html" style="color:dodgerblue;font-size:0.8em;">Logout</a>
             </div>
         </div>
     </div>
@@ -78,7 +79,16 @@
                     <div id="team-b"><p>Team B</p></div>
                 </div>
                 <section class="friends-content section friends">
-
+                    <form style="width: max-content;">
+                        <label for="team" title="This is used for organisation" style="color: white;">Team:</label>
+                        <select name="team" id="team">
+                            <option value="Design">Design</option>
+                            <option value="Tech">Tech</option>
+                            <option value="Management">Management</option>
+                            <option value="HR">HR</option>
+                        </select>
+                        <a href="physical.html" style="color:dodgerblue;">Alternative Teams Look</a>
+                    </form>
                     <div class="friends-container">
                         <div class="friend_name"> 
                             <img src="images/inverse_profile.png" >
@@ -112,7 +122,6 @@
                             <img src="images/inverse_profile.png" >
                             <p>Name</p>
                     </div>
-                    <!--<a href="physical.html" style="color:dodgerblue;">Alternative Teams Look For Physical Prototype</a>-->
                 </section>
 
                 <section id="individual-profile" class="friends-profile">
@@ -178,7 +187,7 @@
                 </section>
                 
                 <div class="section messages chat-room-contact chat-room-content">
-                    <input class='chat-search-bar' type="text" placeholder="Search..">
+                    <input class='chat-search-bar' type="text" placeholder="Search.." id="search">
 
                     <div class="all_contacts" id="contact-list">
                         <div class="individual_contact current-contact">
