@@ -198,8 +198,8 @@ $(document).ready(function() {
             } else {
                 send_to_server(message, relationship, receiverCulture).then(jsonMessage => {
                     send_message($('#input').val(), chatID, userID, jsonMessage.content);
+                    $('#input').val("");
                 });
-                $('#input').val("");
             }
 
             const now = Date.now();
